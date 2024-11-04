@@ -8,58 +8,73 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ReservationsRepository::class)]
 class Reservations
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+  #[ORM\Id]
+  #[ORM\GeneratedValue]
+  #[ORM\Column]
+  private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'date', cascade: ['persist', 'remove'])]
-    private ?Users $user_id = null;
+  #[ORM\OneToOne(inversedBy: 'date', cascade: ['persist', 'remove'])]
+  private ?Users $user_id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $time_start = null;
+  #[ORM\Column(type: 'datetime')]
+  private ?\DateTimeInterface $date = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $time_end = null;
+  #[ORM\Column(length: 255)]
+  private ?string $time_start = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+  #[ORM\Column(length: 255)]
+  private ?string $time_end = null;
 
-    public function getUserId(): ?Users
-    {
-        return $this->user_id;
-    }
+  public function getId(): ?int
+  {
+    return $this->id;
+  }
 
-    public function setUserId(?Users $user_id): static
-    {
-        $this->user_id = $user_id;
+  public function getUserId(): ?Users
+  {
+    return $this->user_id;
+  }
 
-        return $this;
-    }
+  public function setUserId(?Users $user_id): static
+  {
+    $this->user_id = $user_id;
 
-    public function getTimeStart(): ?string
-    {
-        return $this->time_start;
-    }
+    return $this;
+  }
 
-    public function setTimeStart(string $time_start): static
-    {
-        $this->time_start = $time_start;
+  public function getDate(): ?\DateTimeInterface
+  {
+    return $this->date;
+  }
 
-        return $this;
-    }
+  public function setDate(?\DateTimeInterface $date): self
+  {
+    $this->date = $date;
 
-    public function getTimeEnd(): ?string
-    {
-        return $this->time_end;
-    }
+    return $this;
+  }
 
-    public function setTimeEnd(string $time_end): static
-    {
-        $this->time_end = $time_end;
+  public function getTimeStart(): ?string
+  {
+    return $this->time_start;
+  }
 
-        return $this;
-    }
+  public function setTimeStart(string $time_start): static
+  {
+    $this->time_start = $time_start;
+
+    return $this;
+  }
+
+  public function getTimeEnd(): ?string
+  {
+    return $this->time_end;
+  }
+
+  public function setTimeEnd(string $time_end): static
+  {
+    $this->time_end = $time_end;
+
+    return $this;
+  }
 }
