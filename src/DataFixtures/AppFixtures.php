@@ -4,42 +4,61 @@ namespace App\DataFixtures;
 
 use App\Entity\Slots;
 use App\Entity\Users;
-use DateTimeImmutable;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
 // RAPPEL: pour MAJ la BDD : symfony console doctrine:fixtures:load -n
+
 class AppFixtures extends Fixture
 {
   public function load(ObjectManager $manager): void
   {
-    $user1 = new Users();
-    $user1->setFirstname('John');
-    $user1->setLastname('Doe');
-    $user1->setEmail('john.doe@gmail.com');
-    $user1->setRole('ROLE_USER');
-    // $user1->setPassword('123456'); // à voir plus tard si besoin - ne pas faire en Prod !
-    $manager->persist($user1);
+    $this->loadUsers($manager);
+    $this->loadSlots($manager);
+  }
 
-    $user2 = new Users();
-    $user2->setFirstname('Jane');
-    $user2->setLastname('Doe');
-    $user2->setEmail('jane.doe@gmail.com');
-    $user2->setRole('ROLE_USER');
-    // $user2>setPassword('123456'); // à voir plus tard si besoin - ne pas faire en Prod !
-    $manager->persist($user2);
 
-    $slot1 = new Slots();
-    $slot1->setDateTime(new DateTimeImmutable('2024-11-14 17:00:00'));
-    $manager->persist($slot1);
+  private function loadUsers(ObjectManager $manager): void
+  {
+    $users = [
+      ['John', 'Doe', 'john.doe@gmail.com', 'ROLE_USER'],
+      ['Jane', 'Doe', 'jane.doe@gmail.com', 'ROLE_USER'],
+      ['Admin', 'Admin', 'admin@gmail.com', 'ROLE_ADMIN'],  // pour tester la page Admin
+    ];
 
-    $slot2 = new Slots();
-    $slot2->setDateTime(new DateTimeImmutable('2024-11-15 18:00:00'));
-    $manager->persist($slot2);
+    foreach ($users as $userData) {
+      $user = new Users();
+      $user->setFirstname($userData[0]);
+      $user->setLastname($userData[1]);
+      $user->setEmail($userData[2]);
+      $user->setRole($userData[3]);
+      $manager->persist($user);
+    }
 
-    $slot3 = new Slots();
-    $slot3->setDateTime(new DateTimeImmutable('2024-11-16 19:00:00'));
-    $manager->persist($slot3);
+    $manager->flush();
+  }
+
+  private function loadSlots(ObjectManager $manager): void
+  {
+    $slots = [
+      '2024-11-11 17:00:00',
+      '2024-11-11 17:20:00',
+      '2024-11-11 17:40:00',
+      '2024-11-11 18:00:00',
+      '2024-11-11 18:20:00',
+      '2024-11-11 18:40:00',
+      '2024-11-11 19:00:00',
+      '2024-11-12 17:00:00',
+      '2024-11-12 17:20:00'
+    ];
+
+    // Ajoutez d'autres créneaux horaires ici
+    foreach ($slots as $slotData) {
+      $slot = new Slots();
+      $slot->setDateTime(new \DateTimeImmutable($slotData));
+      $slot->setAvailable('yes');
+      $manager->persist($slot);
+    }
 
     $manager->flush();
   }

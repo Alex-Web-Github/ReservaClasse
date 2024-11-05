@@ -34,27 +34,37 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for reservation in reservations %}
+			{% if reservations is empty %}
 				<tr>
 					<th
-						scope="row">
-						{{ reservation.user.firstname }}
-						{{ reservation.user.lastname }}
+						colspan="5"
+						class="text-center">
+						Aucune réservation effectuée pour le moment.
 					</th>
-					<td>
-						{{ reservation.slot.datetime | date('d/m/Y') }}
-					</td>
-					<td>
-						{{ reservation.slot.datetime | date('H:i') }}
-					</td>
-					<td>
-						{{ reservation.slot.getEndTime | date('H:i') }}
-					</td>
-					<td>
-						{{ reservation.status}}
-					</td>
 				</tr>
-			{% endfor %}
+			{% else %}
+				{% for reservation in reservations %}
+					<tr>
+						<th
+							scope="row">
+							{{ reservation.user.firstname }}
+							{{ reservation.user.lastname }}
+						</th>
+						<td>
+							{{ reservation.slot.datetime | date('d/m/Y') }}
+						</td>
+						<td>
+							{{ reservation.slot.datetime | date('H:i') }}
+						</td>
+						<td>
+							{{ reservation.slot.getEndTime | date('H:i') }}
+						</td>
+						<td>
+							{{ reservation.status}}
+						</td>
+					</tr>
+				{% endfor %}
+			{% endif %}
 		</tbody>
 	</table>
 </div>

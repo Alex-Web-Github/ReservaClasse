@@ -18,10 +18,15 @@ class ReservationsRepository extends ServiceEntityRepository
 
   public function findAll(): array
   {
-    return $this->createQueryBuilder('r')
+    $q = $this->createQueryBuilder('r')
       ->orderBy('r.id', 'ASC')
-      ->getQuery()
-      ->getResult();
+      ->getQuery();
+
+    if ($q->getResult() === null) {
+      return [];
+    } else {
+      return $q->getResult();
+    }
   }
 
 
