@@ -21,7 +21,7 @@ class Slots
   private ?\DateTimeImmutable $time_start = null;
 
   #[ORM\Column(length: 255)]
-  private ?string $available = null;
+  private ?string $available = 'yes';
 
 
   public function getId(): ?int

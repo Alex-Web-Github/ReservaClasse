@@ -8,58 +8,58 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ReservationsRepository::class)]
 class Reservations
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+  #[ORM\Id]
+  #[ORM\GeneratedValue]
+  #[ORM\Column]
+  private ?int $id = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?Users $user = null;
+  #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+  private ?Users $user = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?Slots $slot = null;
+  #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+  private ?Slots $slot = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $available = null;
+  #[ORM\Column(length: 255)]
+  private ?string $status = 'pending';
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+  public function getId(): ?int
+  {
+    return $this->id;
+  }
 
-    public function getUser(): ?Users
-    {
-        return $this->user;
-    }
+  public function getUser(): ?Users
+  {
+    return $this->user;
+  }
 
-    public function setUser(?Users $user): static
-    {
-        $this->user = $user;
+  public function setUser(?Users $user): static
+  {
+    $this->user = $user;
 
-        return $this;
-    }
+    return $this;
+  }
 
-    public function getSlot(): ?Slots
-    {
-        return $this->slot;
-    }
+  public function getSlot(): ?Slots
+  {
+    return $this->slot;
+  }
 
-    public function setSlot(?Slots $slot): static
-    {
-        $this->slot = $slot;
+  public function setSlot(?Slots $slot): static
+  {
+    $this->slot = $slot;
 
-        return $this;
-    }
+    return $this;
+  }
 
-    public function getAvailable(): ?string
-    {
-        return $this->available;
-    }
+  public function getStatus(): ?string
+  {
+    return $this->status;
+  }
 
-    public function setAvailable(string $available): static
-    {
-        $this->available = $available;
+  public function setStatus(string $status): static
+  {
+    $this->status = $status;
 
-        return $this;
-    }
+    return $this;
+  }
 }
