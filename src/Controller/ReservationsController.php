@@ -2,16 +2,21 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Reservations;
+use App\Repository\ReservationsRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ReservationsController extends AbstractController
 {
   // Afficher toutes les réservations
-  #[Route('/reservations', name: 'app_reservations')]
-  public function index(): Response
+  #[Route('/reservations/', name: 'reservations_index', methods: ['GET'])]
+  public function index(ReservationsRepository $repo): Response
   {
-    return $this->render('reservations/index.html.twig', []);
+    //dd(__METHOD__);
+    return $this->render('reservations/index.html.twig', [
+      'reservations' => $repo->findAll(),
+    ]);
   }
 }
