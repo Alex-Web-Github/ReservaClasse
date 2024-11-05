@@ -30,18 +30,15 @@ class AppFixtures extends Fixture
     $manager->persist($user2);
 
     $slot1 = new Slots();
-    $slot1->setDate(new \DateTimeImmutable('2024-11-14'));
-    $slot1->setTimeStart(new \DateTimeImmutable('2024-11-14 17:00:00'));
+    $slot1->setDateTime(new DateTimeImmutable('2024-11-14 17:00:00'));
     $manager->persist($slot1);
 
     $slot2 = new Slots();
-    $slot2->setDate(new \DateTimeImmutable('2024-11-15'));
-    $slot2->setTimeStart(new \DateTimeImmutable('18:20:00'));
+    $slot2->setDateTime(new DateTimeImmutable('2024-11-15 18:00:00'));
     $manager->persist($slot2);
 
     $slot3 = new Slots();
-    $slot3->setDate(new \DateTimeImmutable('2024-11-16'));
-    $slot3->setTimeStart(new \DateTimeImmutable('19:40:00'));
+    $slot3->setDateTime(new DateTimeImmutable('2024-11-16 19:00:00'));
     $manager->persist($slot3);
 
     $manager->flush();

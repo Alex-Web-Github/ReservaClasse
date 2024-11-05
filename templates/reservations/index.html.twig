@@ -6,58 +6,20 @@
 {% endblock %}
 
 
-{% block body %}
-	{# Liste des Réservations #}
-	<H1>
-		Réservez votre créneau en ligne
-	</H1>
+{% block content %}
 
-
-	<table
-		class="table table-hover">
-		{{ dump(reservations) }}
-
-		<thead>
-			<tr>
-				<th
-					scope="col">
-					Prénom/Nom de l'élève
-				</th>
-				<th
-					scope="col">
-					Jour
-				</th>
-				<th
-					scope="col">
-					Heure de début
-				</th>
-				<th
-					scope="col">
-					Heure de fin
-				</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<th
-					scope="row">
-					Lorem ipsum
-				</th>
-				<td>
-					dd/mm/yyyy
-				</td>
-				<td>
-					hh:mm
-				</td>
-				<td>
-					hh:mm
-				</td>
-			</tr>
-
-		</tbody>
-	</table>
-
+	<div
+		class="container mt-4 py-4">
+		<div
+			class="row">
+			<div
+				class="col-12 col-lg-10 mx-auto">
+				{# Liste/état des Réservations #}
+				{% include 'reservations/_list.html.twig' %}
+			</div>
+		</div>
+	</div>
 	{# BTN Réserver un créneau qui ouvre une Pop-up ci-dessous #}
-	{# Pop-up : Liste des Créneaux dispo suivants les jours (onglets) de réunions #}
 
+	{# Pop-up : Liste des Créneaux dispo suivants les jours (onglets) de réunions #}
 {% endblock %}

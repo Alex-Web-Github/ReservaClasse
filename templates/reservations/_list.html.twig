@@ -1,0 +1,60 @@
+{# templates-parts : /reservations/_list.html.twig #}
+
+<h2
+	class="fs-3 mb-4 text-primary">
+	État des réservations
+</h2>
+<div
+	class="table-responsive-sm">
+	<table
+		class="table table-striped">
+		<thead>
+			<tr
+				class="table-primary">
+				<th
+					scope="col">
+					Prénom / Nom de l'élève
+				</th>
+				<th
+					scope="col">
+					Jour
+				</th>
+				<th
+					scope="col">
+					Heure de début
+				</th>
+				<th
+					scope="col">
+					Heure de fin
+				</th>
+				<th
+					scope="col">
+					Statut
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for reservation in reservations %}
+				<tr>
+					<th
+						scope="row">
+						{{ reservation.user.firstname }}
+						{{ reservation.user.lastname }}
+					</th>
+					<td>
+						{{ reservation.slot.datetime | date('d/m/Y') }}
+					</td>
+					<td>
+						{{ reservation.slot.datetime | date('H:i') }}
+					</td>
+					<td>
+						{{ reservation.slot.getEndTime | date('H:i') }}
+					</td>
+					<td>
+						{{ reservation.status}}
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>

@@ -14,11 +14,8 @@ class Slots
   #[ORM\Column]
   private ?int $id = null;
 
-  #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-  private ?\DateTimeImmutable $date = null;
-
-  #[ORM\Column(type: Types::TIME_IMMUTABLE)]
-  private ?\DateTimeImmutable $time_start = null;
+  #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+  private ?\DateTimeImmutable $dateTime = null;
 
   #[ORM\Column(length: 255)]
   private ?string $available = 'yes';
@@ -29,26 +26,14 @@ class Slots
     return $this->id;
   }
 
-  public function getDate(): ?\DateTimeImmutable
+  public function getDateTime(): ?\DateTimeImmutable
   {
-    return $this->date;
+    return $this->dateTime;
   }
 
-  public function setDate(\DateTimeImmutable $date): static
+  public function setDateTime(\DateTimeImmutable $dateTime): static
   {
-    $this->date = $date;
-
-    return $this;
-  }
-
-  public function getTimeStart(): ?\DateTimeImmutable
-  {
-    return $this->time_start;
-  }
-
-  public function setTimeStart(\DateTimeImmutable $time_start): static
-  {
-    $this->time_start = $time_start;
+    $this->dateTime = $dateTime;
 
     return $this;
   }
@@ -63,5 +48,11 @@ class Slots
     $this->available = $available;
 
     return $this;
+  }
+
+
+  public function getEndTime(): ?\DateTimeImmutable
+  {
+    return $this->dateTime->modify('+20 minutes');
   }
 }
