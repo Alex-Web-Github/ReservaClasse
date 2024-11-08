@@ -1,0 +1,77 @@
+                <h2 class="fs-3 mb-4 text-primary">Liste des jours / créneaux disponibles</h2>
+
+                {# Liste/état des créneaux #}
+                {% if slots is empty %}
+                    <div class="alert alert-info" role="alert">
+                        Aucun créneau disponible pour le moment.
+                    </div>
+                {% endif %}
+
+                {# Regrouper les slots par date #}
+                {% set groupedSlots = {} %}
+                {% for slot in slots %}
+                    {% set dateKey = slot.datetime | date('d/m/Y') %}
+                    {% if groupedSlots[dateKey] is not defined %}
+                        {% set groupedSlots = groupedSlots | merge({ (dateKey): [] }) %}
+                    {% endif %}
+                    {% set groupedSlots = groupedSlots | merge({ (dateKey): groupedSlots[dateKey] | merge([slot]) }) %}
+                {% endfor %}
+
+                <div class="btn-group mb-4" role="group" aria-label="Basic radio toggle button group">
+                    {% for date, slots in groupedSlots %}
+                        {# Générer un ID unique pour chaque bouton #}
+                        {% set buttonId = 'btnradio_' ~ loop.index %}
+
+                        <input
+                            type="radio"
+                            class="btn-check"
+                            name="btnradio"
+                            id="{{ buttonId }}" autocomplete="off"
+                            onclick="showSlots('{{ loop.index }}')"
+                            {% if loop.first %}checked{% endif %}>
+                        <label
+                            class="btn btn-outline-primary"
+                            for="{{ buttonId }}">
+                            {{ date }}
+                        </label>
+                    {% endfor %}
+                </div> {# Correction ici : fermeture de la div btn-group #}
+
+                {# Conteneur pour afficher les créneaux par date #}
+                <div id="slots-container">
+                    {% for date, slots in groupedSlots %}
+                        {# Afficher les créneaux pour la première date par défaut, cachés pour les autres #}
+                        <div
+                            class="slots-list"
+                            id="slots_{{ loop.index }}"
+                            style="display: {% if loop.first %}block{% else %}none{% endif %};">
+                            <h4 class="fs-5 mb-3 text-primary text-center">Créneaux pour le {{ date }}</h4>
+                            <div class="table-responsive-md">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Heure de début</th>
+                                            <th>Heure de fin</th>
+                                            <th>Disponibilité</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for slot in slots %}
+                                            <tr>
+                                                <td>{{ slot.datetime | date('H:i') }}</td>
+                                                <td>{{ slot.getEndTime | date('H:i') }}</td>
+                                                <td>
+                                                    {% if slot.available == 'no' %}
+                                                        <span class="badge bg-danger">Indisponible</span>
+                                                    {% else %}
+                                                        <span class="badge bg-success">Disponible</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
