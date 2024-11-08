@@ -16,10 +16,10 @@ class SlotsRepository extends ServiceEntityRepository
     parent::__construct($registry, Slots::class);
   }
 
-  public function findAll(): array
+  public function findAllOrderedByDate(): array
   {
     return $this->createQueryBuilder('s')
-      ->orderBy('s.id', 'ASC')
+      ->orderBy('s.dateTime', 'ASC')
       ->getQuery()
       ->getResult();
   }

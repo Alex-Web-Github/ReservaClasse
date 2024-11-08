@@ -10,13 +10,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ReservationsController extends AbstractController
 {
   // Afficher toutes les réservations
-  #[Route('/reservations/', name: 'page_reservations', methods: ['GET'])]
-  public function index(ReservationsRepository $repoResa): Response
+  #[Route('/reservations/', name: 'page_reservations')]
+  public function index(ReservationsRepository $repo): Response
   {
-    //dd($repoResa->findAll());
+    //dd($repo->findAll());
     return $this->render('reservations/index.html.twig', [
       'page_title' => 'Les réservations',
-      'reservations' => $repoResa->findAll(),
+      'reservations' => $repo->findAll(),
     ]);
   }
 }

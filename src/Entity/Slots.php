@@ -50,7 +50,7 @@ class Slots
     return $this;
   }
 
-
+  // Calcul heure de fin de rendez-vous (20 minutes) à partir de l'heure de début
   public function getEndTime(): ?\DateTimeImmutable
   {
     return $this->dateTime->modify('+20 minutes');
