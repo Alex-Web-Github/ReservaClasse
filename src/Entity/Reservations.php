@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use App\Repository\ReservationsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ReservationsRepository;
 
 #[ORM\Entity(repositoryClass: ReservationsRepository::class)]
 class Reservations
@@ -13,10 +13,12 @@ class Reservations
   #[ORM\Column]
   private ?int $id = null;
 
-  #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+  #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: 'reservations')]
+  #[ORM\JoinColumn(nullable: false)]
   private ?Users $user = null;
 
-  #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+  #[ORM\OneToOne(targetEntity: Slots::class, cascade: ['persist', 'remove'])]
+  #[ORM\JoinColumn(nullable: false)]
   private ?Slots $slot = null;
 
   #[ORM\Column(length: 255)]
@@ -31,11 +33,9 @@ class Reservations
   {
     return $this->user;
   }
-
-  public function setUser(?Users $user): static
+  public function setUser(Users $user): self
   {
     $this->user = $user;
-
     return $this;
   }
 
@@ -43,11 +43,9 @@ class Reservations
   {
     return $this->slot;
   }
-
-  public function setSlot(?Slots $slot): static
+  public function setSlot(Slots $slot): self
   {
     $this->slot = $slot;
-
     return $this;
   }
 
@@ -55,11 +53,16 @@ class Reservations
   {
     return $this->status;
   }
-
-  public function setStatus(string $status): static
+  public function setStatus(string $status): self
   {
     $this->status = $status;
-
     return $this;
+  }
+
+  // Calcul heure de fin de rendez-vous (20 minutes) à partir
+  // de l'heure de début
+  public function getEndTime(): ?\DateTimeImmutable
+  {
+    return $this->slot->getDateTime()->modify('+20 minutes');
   }
 }

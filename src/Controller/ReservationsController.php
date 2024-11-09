@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Users;
 use App\Entity\Reservations;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationsRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -32,5 +34,15 @@ class ReservationsController extends AbstractController
     // dd($repo->findAll());
     // TODO : Gérer les erreurs ici ou dans le Repository ???
     return $this->redirectToRoute('page_slots');
+  }
+
+  // Supprimer une réservation depuis un créneau donné (pour un utilisateur donné)
+  public function cancelReservation(Users $user, Reservations $reservation, EntityManagerInterface $entityManager): void
+  {
+    if ($user->getReservations()->contains($reservation)) {
+      $user->removeReservation($reservation);
+      $entityManager->remove($reservation); // Supprime complètement la réservation
+      $entityManager->flush();
+    }
   }
 }

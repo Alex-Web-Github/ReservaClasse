@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\SlotsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Reservations;
 
 #[ORM\Entity(repositoryClass: SlotsRepository::class)]
 class Slots
@@ -20,6 +21,8 @@ class Slots
   #[ORM\Column(length: 255)]
   private ?string $available = 'yes';
 
+  #[ORM\OneToOne(mappedBy: 'slot', targetEntity: Reservations::class)]
+  private ?Reservations $reservation = null;
 
   public function getId(): ?int
   {
@@ -54,5 +57,10 @@ class Slots
   public function getEndTime(): ?\DateTimeImmutable
   {
     return $this->dateTime->modify('+20 minutes');
+  }
+
+  public function getReservation(): ?Reservations
+  {
+    return $this->reservation;
   }
 }

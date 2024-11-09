@@ -41,6 +41,8 @@ class AppFixtures extends Fixture
   private function loadSlots(ObjectManager $manager): void
   {
     $slots = [
+      '2024-11-13 17:40:00',
+      '2024-11-13 18:20:00',
       '2024-11-11 17:00:00',
       '2024-11-11 17:20:00',
       '2024-11-11 17:40:00',
@@ -49,7 +51,7 @@ class AppFixtures extends Fixture
       '2024-11-11 18:40:00',
       '2024-11-11 19:00:00',
       '2024-11-12 17:00:00',
-      '2024-11-12 17:20:00'
+      '2024-11-12 17:20:00',
     ];
 
     // Ajoutez d'autres créneaux horaires ici

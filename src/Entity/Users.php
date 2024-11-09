@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\UsersRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UsersRepository;
 
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
 class Users
@@ -19,11 +21,19 @@ class Users
   #[ORM\Column(length: 255)]
   private ?string $lastname = null;
 
-  #[ORM\Column(length: 255)]
+  #[ORM\Column(length: 255, unique: true)]
   private ?string $email = null;
 
-  #[ORM\Column(length: 255)]
+  #[ORM\Column(length: 50)]
   private ?string $role = null;
+
+  #[ORM\OneToMany(mappedBy: 'user', targetEntity: Reservations::class, cascade: ['persist', 'remove'])]
+  private Collection $reservations;
+
+  public function __construct()
+  {
+    $this->reservations = new ArrayCollection();
+  }
 
   public function getId(): ?int
   {
@@ -34,11 +44,9 @@ class Users
   {
     return $this->firstname;
   }
-
-  public function setFirstname(string $firstname): static
+  public function setFirstname(string $firstname): self
   {
     $this->firstname = $firstname;
-
     return $this;
   }
 
@@ -46,11 +54,9 @@ class Users
   {
     return $this->lastname;
   }
-
-  public function setLastname(string $lastname): static
+  public function setLastname(string $lastname): self
   {
     $this->lastname = $lastname;
-
     return $this;
   }
 
@@ -58,11 +64,9 @@ class Users
   {
     return $this->email;
   }
-
-  public function setEmail(string $email): static
+  public function setEmail(string $email): self
   {
     $this->email = $email;
-
     return $this;
   }
 
@@ -70,10 +74,38 @@ class Users
   {
     return $this->role;
   }
-
-  public function setRole(string $role): static
+  public function setRole(string $role): self
   {
     $this->role = $role;
+    return $this;
+  }
+
+  /**
+   * @return Collection|Reservations[]
+   */
+  public function getReservations(): Collection
+  {
+    return $this->reservations;
+  }
+
+  public function addReservation(Reservations $reservation): self
+  {
+    if (!$this->reservations->contains($reservation)) {
+      $this->reservations[] = $reservation;
+      $reservation->setUser($this);
+    }
+
+    return $this;
+  }
+
+  public function removeReservation(Reservations $reservation): self
+  {
+    if ($this->reservations->removeElement($reservation)) {
+      // set the owning side to null (unless already changed)
+      // if ($reservation->getUser() === $this) {
+      //   $reservation->setUser(null);
+      // }
+    }
 
     return $this;
   }
