@@ -24,6 +24,16 @@ class SlotsRepository extends ServiceEntityRepository
       ->getResult();
   }
 
+  public function findOneById($id): ?Slots
+  {
+    return $this->createQueryBuilder('s')
+      ->andWhere('s.id = :id')
+      ->setParameter('id', $id)
+      ->getQuery()
+      ->getOneOrNullResult();
+  }
+
+
   //    /**
   //     * @return Slots[] Returns an array of Slots objects
   //     */

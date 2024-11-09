@@ -62,9 +62,10 @@
                                                 <td>{{ slot.getEndTime | date('H:i') }}</td>
                                                 <td>
                                                     {% if slot.available == 'no' %}
-                                                        <span class="badge bg-danger">Indisponible</span>
+                                                        <button type="button" class="btn btn-alert btn" disabled>Indisponible</button>
                                                     {% else %}
-                                                        <span class="badge bg-success">Disponible</span>
+                                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-{{ slot.id }}">
+                                                            Je réserve
                                                     {% endif %}
                                                 </td>
                                             </tr>
@@ -75,3 +76,46 @@
                         </div>
                     {% endfor %}
                 </div>
+
+                {# Modaux pour la réservation #}
+                {% for date, slots in groupedSlots %}
+                    {% for slot in slots %}
+                        <div class="modal fade" id="modal-{{ slot.id }}" tabindex="-1" aria-labelledby="modal-{{ slot.id }}-label" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modal-{{ slot.id }}-label">Réservation du créneau du {{ slot.datetime | date('d/m/Y') }} à {{ slot.datetime | date('H:i') }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{ path('reservation_create', { 'id': slot.id }) }}" method="post">
+
+                                        <div class="mb-3">
+                                            
+                                            <label for="user" class="form-label">Nom de l'élève</label>
+                                            <select class="form-select" id="user" name="user" required>
+                                                <option value="">Choisir un élève</option>
+                                                {% for user in users %}
+                                                    <option value="{{ user.id }}">{{ user.firstname }} {{ user.lastname }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label">Adresse e-mail de l'élève</label>
+                                            <input type="email" class="form-control" id="email" name="email" required>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary">Valider la réservation</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+

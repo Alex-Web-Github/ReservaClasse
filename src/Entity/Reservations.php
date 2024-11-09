@@ -20,7 +20,7 @@ class Reservations
   private ?Slots $slot = null;
 
   #[ORM\Column(length: 255)]
-  private ?string $status = 'pending';
+  private ?string $status = 'confirmé';
 
   public function getId(): ?int
   {
