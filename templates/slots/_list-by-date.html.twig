@@ -62,7 +62,7 @@
                                                 <td>{{ slot.getEndTime | date('H:i') }}</td>
                                                 <td>
                                                     {% if slot.available == 'no' %}
-                                                        <button type="button" class="btn btn-alert btn" disabled>Indisponible</button>
+                                                        <button type="button" class="btn btn-alert" disabled>Indisponible</button>
                                                     {% else %}
                                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-{{ slot.id }}">
                                                             Je réserve
@@ -94,17 +94,18 @@
                                             
                                             <label for="user" class="form-label">Nom de l'élève</label>
                                             <select class="form-select" id="user" name="user" required>
-                                                <option value="">Choisir un élève</option>
+                                                <option value="">Choisir dans la li</option>
                                                 {% for user in users %}
                                                     <option value="{{ user.id }}">{{ user.firstname }} {{ user.lastname }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="email" class="form-label">Adresse e-mail de l'élève</label>
-                                            <input type="email" class="form-control" id="email" name="email" required>
+                                        {# ajouter checkbox de confirmation #}
+                                        <div class="mb-3 form-check">
+                                            <input type="checkbox" class="form-check-input" id="confirm" name="confirmCheck" required>
+                                            <label class="form-check-label" for="confirmCheck">Je confirme ma réservation</label>
                                         </div>
-
+                                        
                                         <button type="submit" class="btn btn-primary">Valider la réservation</button>
                                         </form>
                                     </div>

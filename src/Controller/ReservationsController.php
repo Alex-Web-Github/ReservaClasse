@@ -27,22 +27,14 @@ class ReservationsController extends AbstractController
   #[Route('/reservation/create/{id}', name: 'reservation_create', requirements: ['id' => '\d+'], methods: 'POST')]
   public function create(ReservationsRepository $repo, $id): Response
   {
-    // dump($id, $user);
     // dd($_POST);
+    // je récupère le contenu du formulaire <select> avec le name="user"
     $user = $_POST['user'];
     $repo->createReservationFromSlotIdAndUserId($id, $user);
-    // dd($repo->findAll());
-    // TODO : Gérer les erreurs ici ou dans le Repository ???
-    return $this->redirectToRoute('page_slots');
+
+    return $this->redirectToRoute('page_reservations');
   }
 
-  // Supprimer une réservation depuis un créneau donné (pour un utilisateur donné)
-  public function cancelReservation(Users $user, Reservations $reservation, EntityManagerInterface $entityManager): void
-  {
-    if ($user->getReservations()->contains($reservation)) {
-      $user->removeReservation($reservation);
-      $entityManager->remove($reservation); // Supprime complètement la réservation
-      $entityManager->flush();
-    }
-  }
+  // TODO Supprimer une réservation depuis un créneau donné (pour un utilisateur donné)
+
 }

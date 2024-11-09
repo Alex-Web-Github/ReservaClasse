@@ -21,9 +21,35 @@ class AppFixtures extends Fixture
   private function loadUsers(ObjectManager $manager): void
   {
     $users = [
-      ['John', 'Doe', 'john.doe@gmail.com', 'ROLE_USER'],
-      ['Jane', 'Doe', 'jane.doe@gmail.com', 'ROLE_USER'],
-      ['Admin', 'Admin', 'admin@gmail.com', 'ROLE_ADMIN'],  // pour tester la page Admin
+      ['Marius', 'ALBERTINI', 'marius.albertini@test.fr', 'ROLE_USER'],
+      ['Élina', 'ALMARZA RUIZ', 'elina.almarza_ruiz@test.fr', 'ROLE_USER'],
+      ['Jade', 'BASTIEN', 'jade.bastien@test.fr', 'ROLE_USER'],
+      ['Léonardo', 'BRUCHON', 'leonardo.bruchon@test.fr', 'ROLE_USER'],
+      ['Noam', 'CARISEY', 'noam.carisey@test.fr', 'ROLE_USER'],
+      ['Marius', 'CHAMPOD', 'marius.champod@test.fr', 'ROLE_USER'],
+      ['Elena', 'CHAUVIN', 'elena.chauvin@test.fr', 'ROLE_USER'],
+      ['Gaspard', 'CUINET', 'gaspard.cuinet@test.fr', 'ROLE_USER'],
+      ['Maxence', 'CUINET', 'maxence.cuinet@test.fr', 'ROLE_USER'],
+      ['Elona', 'DAVID', 'elona.david@test.fr', 'ROLE_USER'],
+      ['Quentin', 'DUCROT', 'quentin.ducrot@test.fr', 'ROLE_USER'],
+      ['Gabin', 'FORTRYE-DANEZIS', 'gabin.fortrye_danezis@test.fr', 'ROLE_USER'],
+      ['Quentin', 'FRANTZ', 'quentin.frantz@test.fr', 'ROLE_USER'],
+      ['Nora', 'HASBROUCQ', 'nora.hasbroucq@test.fr', 'ROLE_USER'],
+      ['Tilyo', 'HUOT-MARCHAND', 'tilyo.huot_marchand@test.fr', 'ROLE_USER'],
+      ['Samson', 'LACAUSTE', 'samson.lacauste@test.fr', 'ROLE_USER'],
+      ['Jules', 'LAMBERT', 'jules.lambert@test.fr', 'ROLE_USER'],
+      ['Jules', 'LAVERGNE', 'jules.lavergne@test.fr', 'ROLE_USER'],
+      ['Shannon', 'LOTTE', 'shannon.lotte@test.fr', 'ROLE_USER'],
+      ['Gabrielle', 'MALPESA', 'gabrielle.malpesa@test.fr', 'ROLE_USER'],
+      ['Lucas', 'MOYSE', 'lucas.moyse@test.fr', 'ROLE_USER'],
+      ['Rozenn', 'PRIGENT', 'rozenn.prigent@test.fr', 'ROLE_USER'],
+      ['Lana', 'RAGOT', 'lana.ragot@test.fr', 'ROLE_USER'],
+      ['Raphaël', 'ROLAND', 'raphael.roland@test.fr', 'ROLE_USER'],
+      ['Merlin', 'SCHMITT-ROCOULET', 'merlin.schmitt_rocoulet@test.fr', 'ROLE_USER'],
+      ['Lauryne', 'SEURET', 'lauryne.seuret@test.fr', 'ROLE_USER'],
+      ['Inès', 'SOUIKI', 'ines.souiki@test.fr', 'ROLE_USER'],
+      ['Lily-Rose', 'VASCONCELOS', 'lily-rose.vasconcelos@test.fr', 'ROLE_USER'],
+      ['Admin', 'ADMIN', 'test@test.fr', 'ROLE_ADMIN'],
     ];
 
     foreach ($users as $userData) {

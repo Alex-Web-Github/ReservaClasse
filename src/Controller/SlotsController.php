@@ -17,8 +17,7 @@ class SlotsController extends AbstractController
     return $this->render('slots/index.html.twig', [
       'page_title' => 'Les créneaux',
       'slots' => $repo->findAllOrderedByDate(),
-      'users' => $repoUsers->findAll(),
-
+      'users' => $repoUsers->findBy(['role' => 'ROLE_USER']),
     ]);
   }
 }
