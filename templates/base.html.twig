@@ -1,108 +1,230 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>
-        {% block title %}Bienvenue sur RéservaClasse{% endblock %}
-    </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="description" content="RéservaClasse - Gestion des rendez-vous Parents-Enseignants">
-        <meta name="application-name" content="RéservaClasse" />
-    <meta name="author" content="AlexCreationWeb">
-    <meta name="robots" content="noindex, nofollow">
-    <meta name="googlebot" content="noindex, nofollow">
-    <meta name="theme-color" content="#007bff">
+<html
+	lang="fr">
+	<head>
+		<meta
+			charset="UTF-8">
+		<title>
+			{% block title %}
+				Bienvenue sur RéservaClasse
+			{% endblock %}
+		</title>
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0">
+		<meta
+			http-equiv="X-UA-Compatible"
+			content="ie=edge">
+		<meta
+			name="ROBOTS"
+			content="NOINDEX, NOFOLLOW">
 
-    <meta property="og:title" content="RéservaClasse - Gestion des rendez-vous Parents-Enseignants">  
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://reservaclasse.local/">
-    <meta property="og:image" content="{{ asset ('/assets/favicon/android-chrome-512x512.png')}}">
-    <meta property="og:description" content="RéservaClasse - Gestion des rendez-vous Parents-Enseignants">
-    <meta property="og:site_name" content="RéservaClasse">
-    <meta property="og:locale" content="fr_FR">
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:image" content="{{ asset ('/assets/favicon/android-chrome-512x512.png')}}">
+		<meta
+			name="description"
+			content="RéservaClasse - Gestion des rendez-vous Parents-Enseignants">
+		<meta
+			name="application-name"
+			content="RéservaClasse"/>
+		<meta
+			name="author"
+			content="AlexCreationWeb">
+		<meta
+			name="robots"
+			content="noindex, nofollow">
+		<meta
+			name="googlebot"
+			content="noindex, nofollow">
+		<meta
+			name="theme-color"
+			content="#007bff">
 
-    {# Favicon #}
-    <link rel="icon" type="image/png" href="{{ asset ('/assets/favicon/favicon-96x96.png')}}" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="{{ asset ('/assets/favicon/favicon.svg')}}" sizes="any" />
-    <link rel="shortcut icon" href="{{ asset ('/assets/favicon/favicon.ico')}}" />
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset ('/assets/favicon/apple-touch-icon.png')}}" />
-    <meta name="apple-mobile-web-app-title" content="ReservaClasse" />
-    <link rel="manifest" href="{{ asset ('/assets/favicon/site.webmanifest')}}" />
-    
-        
-    {# Stylesheets block #}
-    {% block stylesheets %}
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/flatly/bootstrap.min.css">
-    {% endblock %}
-</head>
+		<meta
+			property="og:title"
+			content="RéservaClasse - Gestion des rendez-vous Parents-Enseignants">
+		<meta
+			property="og:type"
+			content="website">
+		<meta
+			property="og:url"
+			content="https://reservaclasse.local/">
+		<meta
+			property="og:image"
+			content="{{ asset ('/assets/favicon/android-chrome-512x512.png')}}">
+		<meta
+			property="og:description"
+			content="RéservaClasse - Gestion des rendez-vous Parents-Enseignants">
+		<meta
+			property="og:site_name"
+			content="RéservaClasse">
+		<meta
+			property="og:locale"
+			content="fr_FR">
+		<meta
+			name="twitter:card"
+			content="summary">
+		<meta
+		name="twitter:image"
+			content="{{ asset ('/assets/favicon/android-chrome-512x512.png')}}">
 
-<body>
-    {# Header block #}
-    {% block header %}
-        {% set _route = app.request.get('_route') %}
-        <header>
-            <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="{{ path('page_home') }}">RéservaClasse</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbar">
-                        <ul class="navbar-nav me-auto">
-                            <li class="nav-item">
-                                <a class="nav-link{{ _route == 'page_home' ? ' active' : '' }}" href="{{ path('page_home') }}">Accueil</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link{{ _route == 'page_reservations' ? ' active' : '' }}" href="{{ path('page_reservations') }}">Les Réservations</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="btn btn-success my-2 my-sm-0{{ _route == 'page_slots' ? ' active' : '' }}" type="button" aria-label="Réserver un créneau" href="{{ path('page_slots') }}">Réserver un créneau</a>
-                            </li>
-                        </ul>
-                        <ul class="navbar-nav ms-auto">
-                            <li class="nav-item">
-                                <a class="nav-link disabled" href="">Connexion</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </header>
-    {% endblock %}
+		{# Favicon #}
+		<link
+			rel="icon"
+			type="image/png"
+			href="{{ asset ('/assets/favicon/favicon-96x96.png')}}" sizes="96x96"/>
+		<link
+			rel="icon"
+			type="image/svg+xml"
+			href="{{ asset ('/assets/favicon/favicon.svg')}}" sizes="any"/>
+		<link
+			rel="shortcut icon"
+			href="{{ asset ('/assets/favicon/favicon.ico')}}"/>
+		<link
+			rel="apple-touch-icon"
+			sizes="180x180"
+			href="{{ asset ('/assets/favicon/apple-touch-icon.png')}}"/>
+		<meta
+			name="apple-mobile-web-app-title"
+			content="ReservaClasse"/>
+		<link
+		rel="manifest"
+			href="{{ asset ('/assets/favicon/site.webmanifest')}}"/>
 
-    {# Main content block #}
-    <main>
-        {% block body %}
 
-            {% include '_block-title.html.twig' %}
-            
-            <div class="container mt-4 py-4">
-		          <div class="row">
-			          <div class="col-12 col-lg-10 mx-auto">
+		{# Stylesheets block #}
+		{% block stylesheets %}
+			<link
+				rel="stylesheet"
+				href="{{ asset('styles/app.scss') }}">
+		{% endblock %}
 
-                  {% block content %}{% endblock %}
+		{# JavaScript block #}
+		{# {% block javascripts %}
+					{% block importmap %}
+						{{ importmap('app') }}
+					{% endblock %}
+				{% endblock %} #}
+	</head>
 
-                  </div>
-                </div>
-              </div>
-              
-        {% endblock %}
-    </main>
+	<body>
+		{# Header block #}
+		{% block header %}
+			{% set _route = app.request.get('_route') %}
+			<header>
+				<nav
+					class="navbar navbar-expand-lg bg-primary"
+					data-bs-theme="dark">
+					<div
+						class="container-fluid">
+						<a
+							class="navbar-brand"
+							href="{{ path('page_home') }}">
+							RéservaClasse
+						</a>
+						<button
+							class="navbar-toggler"
+							type="button"
+							data-bs-toggle="collapse"
+							data-bs-target="#navbar"
+							aria-controls="navbar"
+							aria-expanded="false"
+							aria-label="Toggle navigation">
+							<span
+								class="navbar-toggler-icon"></span>
+						</button>
+						<div
+							class="collapse navbar-collapse"
+							id="navbar">
+							<ul
+								class="navbar-nav me-auto">
+								<li
+									class="nav-item">
+									<a
+										class="nav-link{{ _route == 'page_home' ? ' active' : '' }}"
+										href="{{ path('page_home') }}">
+										Accueil
+									</a>
+								</li>
+								<li
+									class="nav-item">
+									<a
+										class="nav-link{{ _route == 'page_reservations' ? ' active' : '' }}"
+										href="{{ path('page_reservations') }}">
+										Les Réservations
+									</a>
+								</li>
+								<li
+									class="nav-item">
+									<a
+										class="btn btn-success my-2 my-sm-0{{ _route == 'page_slots' ? ' active' : '' }}"
+										type="button"
+										aria-label="Réserver un créneau"
+										href="{{ path('page_slots') }}">
+										Réserver un créneau
+									</a>
+								</li>
+							</ul>
+							<ul
+								class="navbar-nav ms-auto">
+								<li
+									class="nav-item">
+									<a
+										class="nav-link disabled"
+										href="">
+										Connexion
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</nav>
+			</header>
+		{% endblock %}
 
-    {# Footer block #}
-    {% block footer %}
-        <footer>
-            <div class="container-fluid bg-primary py-2" data-bs-theme="dark">
-                <p class="text-center text-white mb-0">&copy; {{ 'now'|date('Y') }} - RéservaClasse</p>
-            </div>
+		{# Main content block #}
+		<main>
+			{% block body %}
 
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-            
-            <script src="{{ asset('assets/js/custom.js') }}"></script>
-        </footer>
-    {% endblock %}
-</body>
+				{% include '_block-title.html.twig' %}
+
+				<div
+					class="container mt-4 py-4">
+					<div
+						class="row">
+						<div
+							class="col-12 col-lg-10 mx-auto">
+
+							{% block content %}
+							{% endblock %}
+
+						</div>
+					</div>
+				</div>
+
+			{% endblock %}
+		</main>
+
+		{# Footer block #}
+		{% block footer %}
+			<footer>
+				<div
+					class="container-fluid bg-primary py-2 mt-auto"
+					data-bs-theme="dark">
+					<p
+						class="text-center text-white mb-0">
+						&copy;
+						{{ 'now'|date('Y') }}
+						- RéservaClasse
+					</p>
+				</div>
+
+			</footer>
+		{% endblock %}
+
+		{# JavaScript block #}
+		{% block javascripts %}
+			{% block importmap %}
+				{{ importmap('app') }}
+			{% endblock %}
+		{% endblock %}
+	</body>
 </html>
