@@ -40,6 +40,20 @@
   --black: #000;
 }
 
+.navbar-brand {
+  img {
+    width: 125px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .navbar-brand {
+    img {
+      width: 200px;
+    }
+  }
+}
+
 /* Basic styles
    ------------------------------------------------------------------------- */
 h1,
@@ -134,14 +148,18 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 100vh;
 }
 // body:not(#homepage) {
 //   padding-top: 110px;
 // }
 
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
 header nav.navbar {
-  margin-bottom: var(--navbar-margin-bottom);
+  // margin-bottom: var(--navbar-margin-bottom);
 }
 header nav.navbar .navbar-brand {
   padding: 0;
@@ -254,11 +272,16 @@ header nav.navbar .nav-item {
   flex: 1;
   /* needed to prevent pages with a very small height and browsers not supporting flex */
   min-height: 600px;
+  min-height: 100vh;
 }
 
-.body-container #main h1,
-.body-container #main h2 {
-  margin-top: 0;
+.body-container #main {
+  height: 100vh;
+  overflow: scroll;
+  h1,
+  h2 {
+    margin-top: 0;
+  }
 }
 
 #sidebar .section {
@@ -282,6 +305,9 @@ footer {
   // margin-top: 2em;
   // padding-top: 2em;
   // padding-bottom: 2em;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
 }
 
 footer p,

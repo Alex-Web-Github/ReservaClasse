@@ -7,38 +7,62 @@
 
 {% block body %}
 	<div
-		class="container py-4">
-		<H1
-			class="text-center fs-1">
-			Bienvenue sur RéservaClasse !
-		</H1>
+		class="container-md mt-5">
+		<div
+			class="p-2 p-md-5 bg-body-tertiary rounded-3">
+			<div
+				class="container-fluid py-5">
+
+				<h2
+					class="col-md-8 fs-5 fw-light">
+					- Réservation de créneaux pour les réunions parents-enseignants -
+				</h2>
+
+				<h1
+					class="display-5 fw-bold">
+					Bienvenue sur Réserva'Classe !
+				</h1>
+
+				<div
+					class="row mb-4 py-5">
+					<div
+						class="col-lg-7">
+						{% set message = "Chers Parents,\nJe vous propose un petit entretien pour faire le point sur le travail et la façon dont se comporte votre enfant à l'école depuis ce début d'année de CM2.\nSoyez ponctuels pour le bon déroulement des rendez-vous.\nMerci,\nFélicie Foulc" %}
+
+						<p
+							class="fs-5 fst-italic">
+
+							{{ message | nl2br }}
+						</p>
+
+						{% set message = "Les entretiens se dérouleront dans la classe de CM2 au Collège, 1er étage.\nLa salle est l'avant-dernière sur la droite." %}
+						<p
+							class="fs-5">
+							{{ message | nl2br }}
+						</p>
+
+					</div>
+
+					<div
+						class="col-lg-4 offset-lg-1">
+						<img
+							class="img-fluid rounded-3"
+							src="{{ asset('img/parents-enseignants-800W.webp') }}" alt="Parents et Enseignants"/>
+					</div>
+
+				</div>
+
+
+				<a
+					class="btn btn-success btn-lg"
+					type="button"
+					aria-label="Réserver un créneau"
+					href="{{ path('page_slots') }}">
+					Réserver votre créneau
+				</a>
+
+			</div>
+		</div>
+
 	</div>
-	<div
-		class="container mt-4 py-4">
-		<h2
-			class="fs-3 mb-4 text-primary">
-			Réunion Parents-Enseignant
-		</h2>
-    <figure>
-      <blockquote class="blockquote">
-      <p>
-			Chères Parents,
-      je vous propose un petit entretien pour faire le point sur le travail et la façon dont votre enfant se comporte à l'école en ce début d'année.
-      Soyez ponctuels pour le bon déroulement des rendez-vous.
-      Merci,
-      Félicie Foulc
-		  </p>
-      <p>
-			Les entretiens se dérouleront dans la classe de CM2 au Collège, 1er étage. La salle est l'avant-dernière sur la droite.
-      </p>
-
-      </blockquote>
-      
-    </figure>
-
-	</div>
-
-	{# BTN Réserver un créneau qui ouvre une Pop-up ci-dessous #}
-	{# Pop-up : Liste des Créneaux dispo suivants les jours (onglets) de réunions #}
-
-{% endblock %}
+</div>{% endblock %}
