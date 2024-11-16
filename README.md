@@ -2,8 +2,6 @@
 
 ![cover](screenshot.webp)
 
-Consulter sur : <http://sc4foal9574.universe.wf/reservaclasse/>
-
 Application Web de gestion de créneaux horaires : un projet perso. pour découvrir le framework PHP Symfony.
 La version 1.0 est volontairement simple, elle est destinée à évoluer.
 
