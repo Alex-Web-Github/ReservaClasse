@@ -13,11 +13,6 @@
 			<div
 				class="container-fluid py-5">
 
-				<h2
-					class="col-md-8 fs-5 fw-light">
-					- Réservation de créneaux pour les réunions parents-enseignants -
-				</h2>
-
 				<h1
 					class="display-5 fw-bold">
 					Bienvenue sur Réserva'Classe !
@@ -26,12 +21,11 @@
 				<div
 					class="row mb-4 py-5">
 					<div
-						class="col-lg-7">
+						class="col-12 col-lg-7">
 						{% set message = "Chers Parents,\nJe vous propose un petit entretien pour faire le point sur le travail et la façon dont se comporte votre enfant à l'école depuis ce début d'année de CM2.\nSoyez ponctuels pour le bon déroulement des rendez-vous.\nMerci,\nFélicie Foulc" %}
 
 						<p
 							class="fs-5 fst-italic">
-
 							{{ message | nl2br }}
 						</p>
 
@@ -40,11 +34,10 @@
 							class="fs-5">
 							{{ message | nl2br }}
 						</p>
-
 					</div>
 
 					<div
-						class="col-lg-4 offset-lg-1">
+						class="col-10 mx-auto col-lg-4 offset-lg-1">
 						<img
 							class="img-fluid rounded-3"
 							src="{{ asset('img/parents-enseignants-800W.webp') }}" alt="Parents et Enseignants"/>
