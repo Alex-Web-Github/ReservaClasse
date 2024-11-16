@@ -23,7 +23,8 @@
 {% endfor %}
 
 <div
-	class="btn-group mb-4"
+	class="mb-4 d-inline-block mx-auto"
+
 	role="group"
 	aria-label="Basic radio toggle button group">
 	{% for date, slots in groupedSlots %}
@@ -38,7 +39,7 @@
 			{% if loop.first %} checked
 			{% endif %}>
 		<label
-			class="slot-button btn btn-outline-primary"
+			class="slot-button btn btn-outline-primary mb-2 mb-sm-0"
 			for="{{ buttonId }}">
 			{{ date }}
 		</label>
@@ -56,9 +57,11 @@
 			id="slots_{{ loop.index }}"
 			style="display: {% if loop.first %}block{% else %}none{% endif %};">
 			<h4
-				class="fs-5 mb-3 text-primary text-center">
+				class="fs-5 mb-4 text-primary text-center">
 				Créneaux pour le
-				{{ date }}
+				<strong>
+					{{ date }}
+				</strong>
 			</h4>
 			<div
 				class="table-responsive-md">
