@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des élèves{% endblock %}
+
+{% block body %}
+<div class="max-w-xl mx-auto mt-8">
+    <h1 class="text-2xl font-bold mb-4">
+        Gestion des élèves - {{ prof.fullName }} ({{ schoolYear }})
+    </h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success mb-4">{{ message }}</div>
+    {% endfor %}
+
+    {% if eleves is not empty %}
+        <div class="mb-4">
+            <h2 class="font-semibold mb-2">Élèves actuels :</h2>
+            <ul class="list-disc list-inside">
+                {% for eleve in eleves %}
+                    <li>{{ eleve.fullName }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+        <p class="mb-4">Aucun élève enregistré pour cette année scolaire.</p>
+    {% endif %}
+
+    {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
+        <div class="form-control">
+            {{ form_label(form.schoolYear, null, {'label_attr': {'class': 'label'}}) }}
+            {{ form_widget(form.schoolYear, {'attr': {'class': 'input input-bordered w-full'}}) }}
+        </div>
+
+        <div class="form-control">
+            {{ form_label(form.elevesList, null, {'label_attr': {'class': 'label'}}) }}
+            {{ form_widget(form.elevesList, {'attr': {'class': 'textarea textarea-bordered w-full'}}) }}
+        </div>
+
+        <button class="btn btn-primary w-full">Mettre à jour</button>
+    {{ form_end(form) }}
+</div>
+{% endblock %}
