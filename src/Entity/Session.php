@@ -2,10 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\SessionRepository;
+use Assert\NotNull;
+use App\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: SessionRepository::class)]
+#[ORM\Entity]
 class Session
 {
     #[ORM\Id]
@@ -14,62 +18,64 @@ class Session
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $label = null;
+    #[Assert\NotBlank(message: 'Le label est obligatoire')]
+    private string $label;
 
-    #[ORM\Column]
-    private ?int $slotDuration = null;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $teacher = null;
 
-    #[ORM\Column]
-    private ?int $slotInterval = null;
-
-    #[ORM\Column(length: 20)]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $publicCode = null;
 
-    #[ORM\Column(length: 20)]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $parentCode = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    #[ORM\Column(type: 'integer')]
+    #[Assert\Positive(message: 'La durée doit être positive')]
+    private int $slotDuration;
+
+    #[ORM\Column(type: 'integer')]
+    #[Assert\PositiveOrZero(message: 'L\'intervalle doit être positif ou nul')]
+    private int $slotInterval;
+
+    #[ORM\OneToMany(mappedBy: 'session', targetEntity: DateSession::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $dates;
+
+    public function __construct()
+    {
+        $this->dates = new ArrayCollection();
+        $this->slotDuration = 20;        // 20 minutes par défaut
+        $this->slotInterval = 0;         // pas d'intervalle par défaut
+        $this->publicCode = uniqid('pub_');
+        $this->parentCode = uniqid('par_');
+        $this->label = '';               // label vide par défaut
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLabel(): ?string
+    public function getLabel(): string
     {
         return $this->label;
     }
 
-    public function setLabel(string $label): static
+    public function setLabel(string $label): self
     {
         $this->label = $label;
-
         return $this;
     }
 
-    public function getSlotDuration(): ?int
+    public function getTeacher(): ?User
     {
-        return $this->slotDuration;
+        return $this->teacher;
     }
 
-    public function setSlotDuration(int $slotDuration): static
+    public function setTeacher(?User $teacher): self
     {
-        $this->slotDuration = $slotDuration;
-
-        return $this;
-    }
-
-    public function getSlotInterval(): ?int
-    {
-        return $this->slotInterval;
-    }
-
-    public function setSlotInterval(int $slotInterval): static
-    {
-        $this->slotInterval = $slotInterval;
-
+        $this->teacher = $teacher;
         return $this;
     }
 
@@ -78,10 +84,9 @@ class Session
         return $this->publicCode;
     }
 
-    public function setPublicCode(string $publicCode): static
+    public function setPublicCode(string $publicCode): self
     {
         $this->publicCode = $publicCode;
-
         return $this;
     }
 
@@ -90,22 +95,58 @@ class Session
         return $this->parentCode;
     }
 
-    public function setParentCode(string $parentCode): static
+    public function setParentCode(string $parentCode): self
     {
         $this->parentCode = $parentCode;
-
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getSlotDuration(): int
     {
-        return $this->user;
+        return $this->slotDuration;
     }
 
-    public function setUser(?User $user): static
+    public function setSlotDuration(int $slotDuration): self
     {
-        $this->user = $user;
+        $this->slotDuration = $slotDuration;
+        return $this;
+    }
 
+    public function getSlotInterval(): int
+    {
+        return $this->slotInterval;
+    }
+
+    public function setSlotInterval(int $slotInterval): self
+    {
+        $this->slotInterval = $slotInterval;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DateSession>
+     */
+    public function getDates(): Collection
+    {
+        return $this->dates;
+    }
+
+    public function addDate(DateSession $date): self
+    {
+        if (!$this->dates->contains($date)) {
+            $this->dates->add($date);
+            $date->setSession($this);
+        }
+        return $this;
+    }
+
+    public function removeDate(DateSession $date): self
+    {
+        if ($this->dates->removeElement($date)) {
+            if ($date->getSession() === $this) {
+                $date->setSession(null);
+            }
+        }
         return $this;
     }
 }

@@ -14,18 +14,18 @@ class Slot
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTime $startTime = null;
+    #[ORM\Column(type: 'boolean')]
+    private bool $isBooked = false;
 
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTime $endTime = null;
-
-    #[ORM\Column(type: Types::BIGINT)]
-    private ?string $isBooked = null;
-
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: DateSession::class, inversedBy: 'slots')]
     #[ORM\JoinColumn(nullable: false)]
     private ?DateSession $dateSession = null;
+
+    #[ORM\Column(type: 'time')]
+    private ?\DateTimeInterface $startTime = null;
+
+    #[ORM\Column(type: 'time')]
+    private ?\DateTimeInterface $endTime = null;
 
     #[ORM\ManyToOne]
     private ?Eleve $eleve = null;
