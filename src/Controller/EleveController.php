@@ -21,17 +21,9 @@ class EleveController extends AbstractController
             throw $this->createNotFoundException("Accès interdit");
         }
 
-        // Récupérer l'année scolaire actuelle (dernière en base)
-        $lastEleve = $em->getRepository(Eleve::class)->findOneBy(
-            ['user' => $prof],
-            ['schoolYear' => 'DESC']
-        );
-
-        $currentSchoolYear = $lastEleve ? $lastEleve->getSchoolYear() : date('Y') . '-' . (date('Y') + 1);
-
         // Récupérer tous les élèves de cette année scolaire
         $eleves = $em->getRepository(Eleve::class)->findBy(
-            ['user' => $prof, 'schoolYear' => $currentSchoolYear],
+            ['user' => $prof],
             ['fullName' => 'ASC']
         );
 
@@ -40,7 +32,7 @@ class EleveController extends AbstractController
 
         $form = $this->createForm(ElevesType::class, null, [
             'data' => [
-                'schoolYear' => $currentSchoolYear,
+                // 'schoolYear' => $currentSchoolYear,
                 'elevesList' => $elevesNames,
             ],
         ]);
@@ -48,21 +40,13 @@ class EleveController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $schoolYear = trim($form->get('schoolYear')->getData());
             $lines = array_filter(array_map('trim', explode("\n", $form->get('elevesList')->getData())));
-
-            // Supprimer anciens élèves de cette année
-            $em->createQuery('DELETE FROM App\Entity\Eleve e WHERE e.user = :prof AND e.schoolYear = :year')
-                ->setParameter('prof', $prof)
-                ->setParameter('year', $schoolYear)
-                ->execute();
 
             // Ajouter les nouveaux
             foreach ($lines as $name) {
                 $eleve = new Eleve();
                 $eleve->setUser($prof);
                 $eleve->setFullName($name);
-                $eleve->setSchoolYear($schoolYear);
                 $em->persist($eleve);
             }
 
@@ -76,7 +60,6 @@ class EleveController extends AbstractController
             'form' => $form->createView(),
             'prof' => $prof,
             'eleves' => $eleves,
-            'schoolYear' => $currentSchoolYear,
         ]);
     }
 }

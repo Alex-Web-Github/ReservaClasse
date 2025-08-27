@@ -16,9 +16,6 @@ class Eleve
     #[ORM\Column(length: 255)]
     private ?string $fullName = null;
 
-    #[ORM\Column(length: 20)]
-    private ?string $schoolYear = null;
-
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
@@ -36,18 +33,6 @@ class Eleve
     public function setFullName(string $fullName): static
     {
         $this->fullName = $fullName;
-
-        return $this;
-    }
-
-    public function getSchoolYear(): ?string
-    {
-        return $this->schoolYear;
-    }
-
-    public function setSchoolYear(string $schoolYear): static
-    {
-        $this->schoolYear = $schoolYear;
 
         return $this;
     }

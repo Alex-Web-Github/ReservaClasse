@@ -5,7 +5,7 @@
 {% block body %}
 <div class="max-w-xl mx-auto mt-8">
     <h1 class="text-2xl font-bold mb-4">
-        Gestion des élèves - {{ prof.fullName }} ({{ schoolYear }})
+        Gestion des élèves - {{ prof.fullName }}
     </h1>
 
     {% for message in app.flashes('success') %}
@@ -26,10 +26,6 @@
     {% endif %}
 
     {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
-        <div class="form-control">
-            {{ form_label(form.schoolYear, null, {'label_attr': {'class': 'label'}}) }}
-            {{ form_widget(form.schoolYear, {'attr': {'class': 'input input-bordered w-full'}}) }}
-        </div>
 
         <div class="form-control">
             {{ form_label(form.elevesList, null, {'label_attr': {'class': 'label'}}) }}
