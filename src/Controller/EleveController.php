@@ -13,13 +13,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class EleveController extends AbstractController
 {
-    #[Route('/admin/{admin_code}/eleves', name: 'admin_eleves')]
+    #[Route('/admin/eleves', name: 'admin_eleves')]
     public function manage(string $admin_code, Request $request, EntityManagerInterface $em): Response
     {
         $prof = $em->getRepository(User::class)->findOneBy(['adminCode' => $admin_code]);
-        if (!$prof) {
-            throw $this->createNotFoundException("Accès interdit");
-        }
 
         // Récupérer tous les élèves de cette année scolaire
         $eleves = $em->getRepository(Eleve::class)->findBy(

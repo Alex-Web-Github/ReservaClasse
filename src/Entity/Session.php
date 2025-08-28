@@ -25,12 +25,6 @@ class Session
     #[ORM\JoinColumn(nullable: false)]
     private ?User $teacher = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private ?string $publicCode = null;
-
-    #[ORM\Column(type: 'string', length: 255)]
-    private ?string $parentCode = null;
-
     #[ORM\Column(type: 'integer')]
     #[Assert\Positive(message: 'La durée doit être positive')]
     private int $slotDuration;
@@ -47,8 +41,6 @@ class Session
         $this->dates = new ArrayCollection();
         $this->slotDuration = 20;        // 20 minutes par défaut
         $this->slotInterval = 0;         // pas d'intervalle par défaut
-        $this->publicCode = uniqid('pub_');
-        $this->parentCode = uniqid('par_');
         $this->label = '';               // label vide par défaut
     }
 
@@ -76,28 +68,6 @@ class Session
     public function setTeacher(?User $teacher): self
     {
         $this->teacher = $teacher;
-        return $this;
-    }
-
-    public function getPublicCode(): ?string
-    {
-        return $this->publicCode;
-    }
-
-    public function setPublicCode(string $publicCode): self
-    {
-        $this->publicCode = $publicCode;
-        return $this;
-    }
-
-    public function getParentCode(): ?string
-    {
-        return $this->parentCode;
-    }
-
-    public function setParentCode(string $parentCode): self
-    {
-        $this->parentCode = $parentCode;
         return $this;
     }
 
