@@ -16,7 +16,7 @@ class Eleve
     #[ORM\Column(length: 255)]
     private ?string $fullName = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'eleves')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 

@@ -90,7 +90,18 @@ class Slot
     public function setEleve(?Eleve $eleve): static
     {
         $this->eleve = $eleve;
+        $this->isBooked = ($eleve !== null);
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return sprintf(
+            '%s-%s%s',
+            $this->startTime?->format('H:i') ?? 'N/A',
+            $this->endTime?->format('H:i') ?? 'N/A',
+            $this->isBooked ? ' (Réservé)' : ''
+        );
     }
 }

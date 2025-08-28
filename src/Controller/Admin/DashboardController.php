@@ -40,18 +40,22 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('ReservaClasse V2');
+            ->setTitle('Administration du site');
     }
 
     public function configureMenuItems(): iterable
     {
+        yield MenuItem::linkToRoute('Accueil | RéservaClasse', 'fas fa-home', 'app_home');
+        yield MenuItem::section('Rendez-vous Parents');
         yield MenuItem::linkToCrud('Les Sessions d\'entretien', 'fas fa-calendar-days', Session::class);
         yield MenuItem::linkToCrud('Les jours de RdV', 'fas fa-calendar-check', DateSession::class);
         yield MenuItem::linkToCrud('Les Créneaux', 'fas fa-clock', Slot::class);
+        yield MenuItem::section('La Classe');
         yield MenuItem::linkToCrud('Les Elèves', 'fas fa-graduation-cap', Eleve::class);
 
         // Options réservées aux administrateurs
         if ($this->isGranted('ROLE_ADMIN')) {
+            yield MenuItem::section('Les utilisateurs');
             yield MenuItem::linkToCrud('Les Profs', 'fas fa-chalkboard-teacher', User::class);
         }
     }

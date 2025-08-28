@@ -21,7 +21,7 @@ class Session
     #[Assert\NotBlank(message: 'Le label est obligatoire')]
     private string $label;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $teacher = null;
 
@@ -79,6 +79,7 @@ class Session
     public function setSlotDuration(int $slotDuration): self
     {
         $this->slotDuration = $slotDuration;
+        $this->recalculateAllDateSessionSlots();
         return $this;
     }
 
@@ -90,6 +91,7 @@ class Session
     public function setSlotInterval(int $slotInterval): self
     {
         $this->slotInterval = $slotInterval;
+        $this->recalculateAllDateSessionSlots();
         return $this;
     }
 
@@ -118,5 +120,25 @@ class Session
             }
         }
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return sprintf(
+            '%s (durée: %d min, intervalle: %d min)',
+            $this->label,
+            $this->slotDuration,
+            $this->slotInterval
+        );
+    }
+
+    /**
+     * Recalcule les créneaux pour toutes les dates de session
+     */
+    private function recalculateAllDateSessionSlots(): void
+    {
+        foreach ($this->dates as $dateSession) {
+            $dateSession->recalculateSlots();
+        }
     }
 }

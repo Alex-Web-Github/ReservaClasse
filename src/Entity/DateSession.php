@@ -86,40 +86,57 @@ class DateSession
         return $this;
     }
 
-    private function recalculateSlots(): void
+    public function recalculateSlots(): void
     {
-        // Supprimer tous les créneaux existants
-        foreach ($this->slots as $slot) {
-            $this->slots->removeElement($slot);
+        // Vérifier les conditions requises
+        if (!$this->session || !$this->startTime || !$this->endTime) {
+            return;
         }
 
-        if (!$this->session || !$this->startTime || !$this->endTime) {
+        // Convertir les heures en minutes depuis minuit pour faciliter les calculs
+        $startMinutes = $this->startTime->format('H') * 60 + $this->startTime->format('i');
+        $endMinutes = $this->endTime->format('H') * 60 + $this->endTime->format('i');
+
+        if ($startMinutes >= $endMinutes) {
             return;
         }
 
         $slotDuration = $this->session->getSlotDuration();
         $slotInterval = $this->session->getSlotInterval();
 
-        $currentTime = \DateTime::createFromInterface($this->startTime);
-        $endTime = \DateTime::createFromInterface($this->endTime);
+        // Limiter le nombre maximum de créneaux pour éviter les boucles infinies
+        $maxSlots = 50; // Nombre maximum raisonnable de créneaux
+        $slotsCount = 0;
 
-        while ($currentTime < $endTime) {
-            $slot = new Slot();
-            $slot->setDateSession($this);
-            $slot->setStartTime(clone $currentTime);
+        // Supprimer les créneaux existants
+        $this->slots->clear();
 
-            // Calculer l'heure de fin du créneau
-            $slotEndTime = clone $currentTime;
-            $slotEndTime->modify(sprintf('+%d minutes', $slotDuration));
+        $currentMinutes = $startMinutes;
+
+        while ($currentMinutes < $endMinutes && $slotsCount < $maxSlots) {
+            $slotEndMinutes = $currentMinutes + $slotDuration;
 
             // Vérifier si le créneau ne dépasse pas l'heure de fin
-            if ($slotEndTime <= $endTime) {
-                $slot->setEndTime($slotEndTime);
+            if ($slotEndMinutes <= $endMinutes) {
+                $slot = new Slot();
+                $slot->setDateSession($this);
+
+                // Créer les DateTime pour le début et la fin du créneau
+                $slotStart = new \DateTime($this->date->format('Y-m-d'));
+                $slotStart->setTime(intdiv($currentMinutes, 60), $currentMinutes % 60);
+
+                $slotEnd = new \DateTime($this->date->format('Y-m-d'));
+                $slotEnd->setTime(intdiv($slotEndMinutes, 60), $slotEndMinutes % 60);
+
+                $slot->setStartTime($slotStart);
+                $slot->setEndTime($slotEnd);
+
                 $this->slots->add($slot);
+                $slotsCount++;
             }
 
             // Passer au prochain créneau
-            $currentTime->modify(sprintf('+%d minutes', $slotDuration + $slotInterval));
+            $currentMinutes += $slotDuration + $slotInterval;
         }
     }
     public function getSession(): ?Session
@@ -147,8 +164,17 @@ class DateSession
             $this->slots->add($slot);
             $slot->setDateSession($this);
         }
-
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return sprintf(
+            '%s %s-%s',
+            $this->date->format('d/m/Y'),
+            $this->startTime->format('H:i'),
+            $this->endTime->format('H:i')
+        );
     }
 
     public function removeSlot(Slot $slot): self

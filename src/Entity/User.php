@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -29,6 +31,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $adminCode = null;
+
+    #[ORM\OneToMany(mappedBy: 'teacher', targetEntity: Session::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $sessions;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Eleve::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $eleves;
+
+    public function __construct()
+    {
+        $this->sessions = new ArrayCollection();
+        $this->eleves = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -96,6 +110,62 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getAdminCode(): ?string
     {
         return $this->adminCode;
+    }
+
+    /**
+     * @return Collection<int, Session>
+     */
+    public function getSessions(): Collection
+    {
+        return $this->sessions;
+    }
+
+    public function addSession(Session $session): self
+    {
+        if (!$this->sessions->contains($session)) {
+            $this->sessions->add($session);
+            $session->setTeacher($this);
+        }
+        return $this;
+    }
+
+    public function removeSession(Session $session): self
+    {
+        if ($this->sessions->removeElement($session)) {
+            // set the owning side to null (unless already changed)
+            if ($session->getTeacher() === $this) {
+                $session->setTeacher(null);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Eleve>
+     */
+    public function getEleves(): Collection
+    {
+        return $this->eleves;
+    }
+
+    public function addEleve(Eleve $eleve): self
+    {
+        if (!$this->eleves->contains($eleve)) {
+            $this->eleves->add($eleve);
+            $eleve->setUser($this);
+        }
+        return $this;
+    }
+
+    public function removeEleve(Eleve $eleve): self
+    {
+        if ($this->eleves->removeElement($eleve)) {
+            // set the owning side to null (unless already changed)
+            if ($eleve->getUser() === $this) {
+                $eleve->setUser(null);
+            }
+        }
+        return $this;
     }
 
     public function setAdminCode(?string $adminCode): self
