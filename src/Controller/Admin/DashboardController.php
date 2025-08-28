@@ -23,10 +23,11 @@ class DashboardController extends AbstractDashboardController
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
-        //return parent::index();
-        // when using legacy admin URLs, use the URL generator to build the needed URL
+        if (!$this->isGranted('ROLE_TEACHER') && !$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_login');
+        }
+
         $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-        // Option 1. Make your dashboard redirect to the same page for all users
         return $this->redirect($adminUrlGenerator->setController(SlotCrudController::class)->generateUrl());
 
         // Option 2. Make your dashboard redirect to different pages depending on the user
@@ -44,11 +45,14 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        //yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Les Sessions d\'entretien', 'fas fa-list', Session::class);
-        yield MenuItem::linkToCrud('Les jours de RdV', 'fas fa-list', DateSession::class);
-        yield MenuItem::linkToCrud('Les Créneaux', 'fas fa-list', Slot::class);
-        yield MenuItem::linkToCrud('Les Elèves', 'fas fa-list', Eleve::class);
-        yield MenuItem::linkToCrud('Les Profs', 'fas fa-list', User::class);
+        yield MenuItem::linkToCrud('Les Sessions d\'entretien', 'fas fa-calendar-days', Session::class);
+        yield MenuItem::linkToCrud('Les jours de RdV', 'fas fa-calendar-check', DateSession::class);
+        yield MenuItem::linkToCrud('Les Créneaux', 'fas fa-clock', Slot::class);
+        yield MenuItem::linkToCrud('Les Elèves', 'fas fa-graduation-cap', Eleve::class);
+
+        // Options réservées aux administrateurs
+        if ($this->isGranted('ROLE_ADMIN')) {
+            yield MenuItem::linkToCrud('Les Profs', 'fas fa-chalkboard-teacher', User::class);
+        }
     }
 }
