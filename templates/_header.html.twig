@@ -1,0 +1,91 @@
+<header>
+  {% set _route = app.request.get('_route') %}
+
+  <div
+    class="container navbar justify-between bg-base-100 shadow-sm">
+    <div
+      class="w-64 flex-initial">
+      <a
+        href="{{ path('app_home') }}">
+        <img
+          src="{{ asset('img/logo-ReservaClasse-2.webp')}}" alt="logo Réserva'Classe">
+      </a>
+    </div>
+    <div
+      class="">
+      <div
+        class="dropdown">
+        <div
+          tabindex="0"
+          role="button"
+          class="btn btn-ghost lg:hidden">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewbox="0 0 24 24"
+            stroke="currentColor">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h8m-8 6h16"/>
+          </svg>
+        </div>
+        <ul
+          tabindex="0"
+          class="menu menu-md dropdown-content absolute right-0 bg-base-100 rounded-box z-1 mt-6 w-52 p-2 shadow">
+          <li>
+            <a>
+              Item 1
+            </a>
+          </li>
+          <li>
+            <a>
+              Item 1
+            </a>
+          </li>
+          <li>
+            <a>
+              Item 1
+            </a>
+          </li>
+          <li>
+            <a>
+              Item 1
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div
+      class="hidden lg:flex">
+      <ul
+        class="menu menu-lg menu-horizontal px-1 gap-4">
+        <li>
+          <a
+            href="{{ path('app_home') }}" class="menu-{{ _route == 'app_home' ? 'active' : '' }}">
+            Accueil
+          </a>
+        </li>
+        <li>
+          <a>
+            Les Réservations
+          </a>
+        </li>
+        <li>
+          <a>
+            Réserver un créneau
+          </a>
+        </li>
+        <li>
+          <a
+            class="menu-{{ _route == 'app_login' ? 'active' : '' }}"
+            href="{{ path('app_login') }}">
+            Connexion
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</header>

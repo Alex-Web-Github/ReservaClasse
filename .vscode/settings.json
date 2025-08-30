@@ -1,0 +1,25 @@
+        {
+            "editor.formatOnSave": true,
+            "workbench.colorCustomizations": {
+                "editorWhitespace.foreground": "#00000000"
+            },
+            "editor.renderWhitespace": "none",
+            "editor.guides.indentation": false,
+            "editor.renderLineHighlight": "none",
+            "editor.guides.highlightActiveIndentation": false,
+            // "[twig]" block removed (duplicate)
+            "files.associations": {
+                "*.twig": "twig",
+                "*.html.twig": "twig"
+            },
+            "[twig]": {
+                "editor.defaultFormatter": "mblode.twig-language-2",
+                "editor.formatOnSave": true,
+                "editor.tabSize": 4
+            },
+            "emmet.includeLanguages": {
+                "twig": "html"
+            },
+            "twig-language-2.indentStyle": "space",
+            "twig-language-2.wrap": 120
+        }

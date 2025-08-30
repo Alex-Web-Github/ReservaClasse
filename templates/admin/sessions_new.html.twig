@@ -1,76 +1,137 @@
 {% extends 'base.html.twig' %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const addDateButton = document.createElement('button');
-            addDateButton.type = 'button';
-            addDateButton.className = 'btn btn-secondary mt-2';
-            addDateButton.innerText = 'Ajouter une date';
+  {{ parent() }}
+  <script>
+    document
+      .addEventListener( 'DOMContentLoaded', function () {
 
-            const datesContainer = document.querySelector('#dates-collection');
-            const prototype = datesContainer.getAttribute('data-prototype');
-            let index = datesContainer.children.length;
 
-            addDateButton.addEventListener('click', function() {
-                const newForm = prototype.replace(/__name__/g, index);
-                const div = document.createElement('div');
-                div.innerHTML = newForm;
-                div.className = 'date-session-form mb-4 p-4 border rounded';
 
-                const deleteButton = document.createElement('button');
-                deleteButton.type = 'button';
-                deleteButton.className = 'btn btn-danger mt-2';
-                deleteButton.innerText = 'Supprimer cette date';
-                deleteButton.onclick = function() {
-                    div.remove();
-                };
+        const addDateButton = document
+          .createElement( 'button' );
+        addDateButton
+          .type = 'button';
+        addDateButton
+          .className = 'btn btn-secondary mt-2';
+        addDateButton
+          .innerText = 'Ajouter une date';
 
-                div.appendChild(deleteButton);
-                datesContainer.appendChild(div);
-                index++;
-            });
+        const datesContainer = document
+          .querySelector( '#dates-collection' );
+        const prototype = datesContainer
+          .getAttribute( 'data-prototype' );
+        let index = datesContainer
+          .children
+          .length;
 
-            datesContainer.parentElement.insertBefore(addDateButton, datesContainer.nextSibling);
-        });
-    </script>
+        addDateButton
+          .addEventListener( 'click', function () {
+
+
+
+            const newForm = prototype
+              .replace( /__name__/g, index );
+            const div = document
+              .createElement( 'div' );
+            div
+              .innerHTML = newForm;
+            div
+              .className = 'date-session-form mb-4 p-4 border rounded';
+
+            const deleteButton = document
+              .createElement( 'button' );
+            deleteButton
+              .type = 'button';
+            deleteButton
+              .className = 'btn btn-danger mt-2';
+            deleteButton
+              .innerText = 'Supprimer cette date';
+            deleteButton
+              .onclick = function () {
+
+
+
+              div
+                .remove();
+
+
+
+            };
+
+            div
+              .appendChild( deleteButton );
+            datesContainer
+              .appendChild( div );
+            index++;
+
+
+
+          } );
+
+        datesContainer
+          .parentElement
+          .insertBefore( addDateButton, datesContainer
+            .nextSibling );
+
+
+
+      } );
+  </script>
 {% endblock %}
 
 {% block body %}
-<div class="max-w-xl mx-auto mt-8">
-    <h1 class="text-2xl font-bold mb-4">
-        Nouvelle session - {{ prof.fullName }}
+  <div
+    class="max-w-xl mx-auto mt-8">
+    <h1
+      class="text-2xl font-bold mb-4">
+      Nouvelle session -
+      {{ prof.fullName }}
     </h1>
 
     {% for message in app.flashes('success') %}
-        <div class="alert alert-success mb-4">{{ message }}</div>
+      <div
+        class="alert alert-success mb-4">
+        {{ message }}
+      </div>
     {% endfor %}
 
-    {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
-        {{ form_row(form.label) }}
-        {{ form_row(form.slotDuration) }}
-        {{ form_row(form.slotInterval) }}
+    {{ form_start(form, {'attr': {'class': 'space-y-4'}}
+    ) }}
+    {{ form_row(form.label) }}
+    {{ form_row(form.slotDuration) }}
+    {{ form_row(form.slotInterval) }}
 
-        <div class="mb-4">
-            <label class="form-label">Dates et horaires</label>
-            <div id="dates-collection"
-                 data-prototype="{{ form_widget(form.dates.vars.prototype)|e('html_attr') }}"
-                 class="space-y-4">
-                {% for dateField in form.dates %}
-                    <div class="date-session-form mb-4 p-4 border rounded">
-                        {{ form_row(dateField.date) }}
-                        {{ form_row(dateField.startTime) }}
-                        {{ form_row(dateField.endTime) }}
-                        <button type="button" class="btn btn-danger mt-2" onclick="this.parentElement.remove()">
-                            Supprimer cette date
-                        </button>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
+    <div
+      class="mb-4">
+      <label
+        class="form-label">
+        Dates et horaires
+      </label>
+      <div
+        id="dates-collection"
+        data-prototype="{{ form_widget(form.dates.vars.prototype)|e('html_attr') }}" class="space-y-4">
+        {% for dateField in form.dates %}
+          <div
+            class="date-session-form mb-4 p-4 border rounded">
+            {{ form_row(dateField.date) }}
+            {{ form_row(dateField.startTime) }}
+            {{ form_row(dateField.endTime) }}
+            <button
+              type="button"
+              class="btn btn-danger mt-2"
+              onclick="this.parentElement.remove()">
+              Supprimer cette date
+            </button>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
 
-        <button class="btn btn-primary w-full">Créer la session</button>
+    <button
+      class="btn btn-primary w-full">
+      Créer la session
+    </button>
     {{ form_end(form) }}
-</div>
+  </div>
 {% endblock %}
