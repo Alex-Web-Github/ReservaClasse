@@ -45,7 +45,7 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToRoute('Accueil | RéservaClasse', 'fas fa-home', 'app_home');
+        yield MenuItem::linkToUrl('Accueil | RéservaClasse', 'fas fa-home', '/');
         yield MenuItem::section('Rendez-vous Parents');
         yield MenuItem::linkToCrud('Les Sessions d\'entretien', 'fas fa-calendar-days', Session::class);
         yield MenuItem::linkToCrud('Les jours de RdV', 'fas fa-calendar-check', DateSession::class);

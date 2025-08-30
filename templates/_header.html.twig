@@ -61,7 +61,8 @@
     <div
       class="hidden lg:flex">
       <ul
-        class="menu menu-lg menu-horizontal px-1 gap-4">
+        class="menu menu-lg menu-horizontal px-1 gap-4 items-center">
+
         <li>
           <a
             href="{{ path('app_home') }}" class="menu-{{ _route == 'app_home' ? 'active' : '' }}">
@@ -78,14 +79,62 @@
             Réserver un créneau
           </a>
         </li>
-        <li>
-          <a
-            class="menu-{{ _route == 'app_login' ? 'active' : '' }}"
-            href="{{ path('app_login') }}">
-            Connexion
-          </a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</header>
+
+        {% if app.user %}
+          <li>
+            <div
+              class="dropdown">
+              <div
+                tabindex="0"
+                role="button"
+                class="btn btn-ghost btn-circle avatar">
+                <div
+                  class="w-10 rounded-full">
+                  <img
+                    alt="Tailwind CSS Navbar component"
+                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"/>
+                </div>
+              </div>
+
+              <ul
+                class="absolute right-0 dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+
+                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+                  <li>
+                    <a
+                      href="{{ path('admin') }}" class="menu"
+                      target="_blank">
+                      Administration
+                    </a>
+                  </li>
+                {% endif %}
+                <li
+                  class="menu-disabled">
+                  <a
+                    href="#">
+                    Mon profil
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="{{ path('app_logout') }}" class="text-error">
+                    Déconnexion
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </li>
+        </details>
+      </li>
+    {% else %}
+      <li>
+        <a
+          class="menu-{{ _route == 'app_login' ? 'active' : '' }}"
+          href="{{ path('app_login') }}">
+          Connexion
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+
+</div></div></header>

@@ -1,43 +1,151 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Connexion{% endblock %}
+{% block title %}
+  Connexion
+{% endblock %}
 
 {% block body %}
-<div class="min-h-screen flex items-center justify-center bg-gray-100">
-    <div class="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-md">
-        <div>
-            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Connexion à l'administration
-            </h2>
-        </div>
-        <form class="mt-8 space-y-6" action="{{ path('app_login') }}" method="post">
-            {% if error %}
-                <div class="rounded-md bg-red-50 p-4">
-                    <div class="text-sm text-red-700">
-                        {{ error.messageKey|trans(error.messageData, 'security') }}
-                    </div>
-                </div>
-            {% endif %}
+  <div
+    class="hero min-h-screen bg-base-200">
+    <div
+      class="hero-content flex-col">
+      <div
+        class="text-center">
+        <h1
+          class="text-5xl font-bold mb-8">
+          Connexion à l'administration
+        </h1>
+      </div>
 
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+      <div
+        class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
 
-            <div class="rounded-md shadow-sm -space-y-px">
-                <div>
-                    <label for="email" class="sr-only">Email</label>
-                    <input id="email" name="_username" type="email" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Email" value="{{ last_username }}">
-                </div>
-                <div>
-                    <label for="password" class="sr-only">Mot de passe</label>
-                    <input id="password" name="_password" type="password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Mot de passe">
-                </div>
+        <form
+          class="card-body"
+          action="{{ path('app_login') }}" method="post">
+          {% if error %}
+            <div
+              class="alert alert-error">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="stroke-current shrink-0 h-6 w-6"
+                fill="none"
+                viewbox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <span>
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+              </span>
             </div>
+          {% endif %}
 
-            <div>
-                <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    Se connecter
-                </button>
+          {% if app.user %}
+            <div
+              class="alert alert-info">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewbox="0 0 24 24"
+                class="stroke-current shrink-0 w-6 h-6">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span>
+                Vous êtes connecté en tant que
+                {{ app.user.userIdentifier }}
+                ,
+                <a
+                  href="{{ path('app_logout') }}" class="link">
+                  Se déconnecter
+                </a>
+              </span>
             </div>
+          {% endif %}
+
+          <input
+            type="hidden"
+            name="_csrf_token"
+            value="{{ csrf_token('authenticate') }}">
+
+          <div
+            class="form-control">
+            <label
+              class="label">
+              <span
+                class="label-text">
+                Email
+              </span>
+            </label>
+            <input
+              type="email"
+              name="_username"
+              placeholder="email@example.com"
+              class="input validator input-bordered"
+              required
+              value="{{ last_username }}"/>
+            <div
+              class="validator-hint hidden">
+              Entrer une adresse e-mail valide
+            </div>
+          </div>
+
+          <div
+            class="form-control">
+            <label
+              class="label">
+              <span
+                class="label-text">
+                Mot de passe
+              </span>
+            </label>
+            <input
+              type="password"
+              name="_password"
+              placeholder="mot de passe"
+              class="input validator input-bordered"
+              minlength="8"
+              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+              title="Doit contenir au moins 8 caractères, dont un chiffre, une lettre minuscule et une lettre majuscule"/>
+            <div
+              class="validator-hint hidden">
+              Le mot de passe doit contenir au moins 8 caractères, dont au moins un chiffre, une lettre minuscule et une lettre
+              majuscule.
+            </div>
+          </div>
+
+          <div
+            class="form-control">
+            <label
+              class="label cursor-pointer">
+              <span
+                class="label-text text-info">
+                Se souvenir de moi
+              </span>
+              <input
+                type="checkbox"
+                name="_remember_me"
+                class="checkbox checkbox-xs checkbox-info"/>
+            </label>
+          </div>
+
+          <div
+            class="form-control mt-6">
+            <button
+              class="btn btn-primary">
+              Se connecter
+            </button>
+          </div>
+
         </form>
+      </div>
     </div>
-</div>
+  </div>
+
 {% endblock %}
