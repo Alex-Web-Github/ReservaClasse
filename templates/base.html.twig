@@ -6,7 +6,6 @@
       charset="UTF-8">
     <title>
       {% block title %}
-        Bienvenue sur RéservaClasse
       {% endblock %}
     </title>
     <meta
@@ -92,13 +91,27 @@
       {% endblock %}
     {% endblock %}
   </head>
-
   <body>
 
     {% include "_header.html.twig" %}
 
-    {% block body %}
-    {% endblock %}
-    {% include "_footer.html.twig" %}
-  </body>
-</html></body></html>
+    <main>
+      <div
+        class="container">
+        <div
+          class="bg-base-100 mx-auto max-w-7xl py-8">
+          <h1
+            class="text-5xl font-bold my-8">
+            {% block title_h1 %}{% endblock %}
+            </h1>
+
+            {% block body %}
+            {% endblock %}
+          </div>
+        </div>
+      </main>
+
+      {% include "_footer.html.twig" %}
+
+    </body>
+  </html>

@@ -61,7 +61,7 @@ class EleveCrudController extends AbstractCrudController
                 ->setHelp('Nom et prénom de l\'élève')
                 ->setFormTypeOption('attr', [
                     'maxlength' => 255,
-                    'placeholder' => 'Ex: Jean Dupont'
+                    'placeholder' => 'Ex: Dupont Jean'
                 ]),
         ];
     }

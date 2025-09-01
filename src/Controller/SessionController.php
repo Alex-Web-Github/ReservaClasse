@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Session;
 use App\Entity\DateSession;
+use App\Entity\Eleve;
 use App\Form\SessionType;
 use App\Service\SlotGenerator;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,44 +15,39 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SessionController extends AbstractController
 {
-    #[Route('/admin/sessions/new', name: 'admin_sessions_new')]
-    public function new(
-        Request $request,
-        EntityManagerInterface $em,
-        SlotGenerator $slotGenerator
-    ): Response {
-        $session = new Session();
-        $form = $this->createForm(SessionType::class, $session);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            foreach ($form->get('dates')->getData() as $dateData) {
-                $dateSession = new DateSession();
-                $dateSession->setSession($session);
-                $dateSession->setDate($dateData->getDate());
-                $dateSession->setStartTime($dateData->getStartTime());
-                $dateSession->setEndTime($dateData->getEndTime());
+    #[Route('/sessions', name: 'index')]
+    public function index(Request $request, EntityManagerInterface $em): Response
+    {
+        $sessions = $em->getRepository(Session::class)->findAll();
 
-                $em->persist($dateSession);
+        return $this->render('session/index.html.twig', [
+            'sessions' => $sessions,
+        ]);
+    }
 
-                // Générer automatiquement les Slots
-                $slotGenerator->generateForDateSession(
-                    $dateSession,
-                    $session->getSlotDuration(),
-                    $session->getSlotInterval()
-                );
-            }
-
-            $em->persist($session);
-            $em->flush();
-
-            $this->addFlash('success', 'Session créée et créneaux générés.');
-
-            return $this->redirectToRoute('admin');
+    #[Route('/sessions/session-{id}', name: 'session_show')]
+    public function all_slots_show(int $id, EntityManagerInterface $em): Response
+    {
+        $sessionById = $em->getRepository(Session::class)->find($id);
+        if (!$sessionById) {
+            throw $this->createNotFoundException('Session non trouvée');
         }
 
-        return $this->render('admin/sessions_new.html.twig', [
-            'form' => $form->createView(),
+        $dateSessionBySessionId = $em->getRepository(DateSession::class)->findBy(['session' => $sessionById]);
+        if (!$dateSessionBySessionId) {
+            throw $this->createNotFoundException('Aucune date programmée pour cette session');
+        }
+
+        $eleves = $em->getRepository(Eleve::class)->findAll();
+        if (!$eleves) {
+            throw $this->createNotFoundException('Aucun élève trouvé');
+        }
+
+        return $this->render('session/all_slots.html.twig', [
+            'sessionId' => $sessionById,
+            'dateSessions' => $dateSessionBySessionId,
+            'eleves' => $eleves
         ]);
     }
 }
