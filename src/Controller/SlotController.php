@@ -20,21 +20,21 @@ class SlotController extends AbstractController
         // Vérifier si le créneau est déjà réservé
         if ($slot->getIsBooked()) {
             $this->addFlash('error', 'Ce créneau est déjà réservé.');
-            return $this->redirectToRoute('session_show', ['id' => $sessionId]);
+            return $this->redirectToRoute('session.show', ['id' => $sessionId]);
         }
 
         // Vérifier si un élève a été sélectionné
         $eleveId = $request->request->get('eleve');
         if (!$eleveId) {
             $this->addFlash('error', 'Veuillez sélectionner un élève.');
-            return $this->redirectToRoute('session_show', ['id' => $sessionId]);
+            return $this->redirectToRoute('session.index', ['id' => $sessionId]);
         }
 
         // Récupérer l'élève sélectionné
         $eleve = $em->getRepository(Eleve::class)->find($eleveId);
         if (!$eleve) {
             $this->addFlash('error', 'Élève non trouvé.');
-            return $this->redirectToRoute('session_show', ['id' => $sessionId]);
+            return $this->redirectToRoute('session.index', ['id' => $sessionId]);
         }
 
         try {
@@ -51,6 +51,27 @@ class SlotController extends AbstractController
             $this->addFlash('error', 'Une erreur est survenue lors de la réservation.');
         }
 
-        return $this->redirectToRoute('session_show', ['id' => $sessionId]);
+        return $this->redirectToRoute('session.index', ['id' => $sessionId]);
+    }
+
+    public function index(EntityManagerInterface $em): Response
+    {
+        $eleves = $em->getRepository(Eleve::class)->findAll();
+
+        // Récupérer les slots réservés pour chaque élève
+        $slots = $em->getRepository(Slot::class)->findAll();
+
+        // Créer un tableau associatif eleveId => slot
+        $eleveSlots = [];
+        foreach ($slots as $slot) {
+            if ($slot->getEleve()) {
+                $eleveSlots[$slot->getEleve()->getId()] = $slot;
+            }
+        }
+
+        return $this->render('eleve/index.html.twig', [
+            'eleves' => $eleves,
+            'eleveSlots' => $eleveSlots
+        ]);
     }
 }

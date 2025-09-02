@@ -4,13 +4,18 @@
                 "editorWhitespace.foreground": "#00000000"
             },
             "editor.renderWhitespace": "none",
-            "editor.guides.indentation": false,
+            "editor.guides.indentation": true,
             "editor.renderLineHighlight": "none",
             "editor.guides.highlightActiveIndentation": false,
             // "[twig]" block removed (duplicate)
             "files.associations": {
                 "*.twig": "twig",
                 "*.html.twig": "twig"
+            },
+            "[javascript]": {
+              "editor.maxTokenizationLineLength": 2500,
+              "editor.defaultFormatter": "esbenp.prettier-vscode"
+
             },
             "[twig]": {
                 "editor.defaultFormatter": "mblode.twig-language-2",

@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Liste des élèves
+{% endblock %}
+
+{% block title_h1 %}
+  Liste des élèves
+{% endblock %}
+
+
+{% block body %}
+  <div
+    class="container">
+    <table
+      class="table table-sm md:table-md lg:table-lg table-zebra">
+      <thead>
+        <tr>
+          <th>
+            Nom Prénom
+          </th>
+          <th>
+            Date/heure de l'entretien
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for eleve in eleves %}
+          <tr>
+            <td
+              class="font-medium">
+              {{ eleve.fullName }}
+            </td>
+            <td>
+              {% if eleveSlots[eleve.id] is defined %}
+                {{ eleveSlots[eleve.id].startTime|date('d/m/Y H:i') }}
+              {% else %}
+                <a
+                  href="
+                                                                                                                                                                                                                                                                              {{ path('session.index') }}
+                                                                                                                                                                                                                                                                            "
+                  class="btn btn-primary">
+
+                  S'inscrire
+                </a>
+
+
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

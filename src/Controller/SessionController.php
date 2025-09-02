@@ -5,8 +5,6 @@ namespace App\Controller;
 use App\Entity\Session;
 use App\Entity\DateSession;
 use App\Entity\Eleve;
-use App\Form\SessionType;
-use App\Service\SlotGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,8 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class SessionController extends AbstractController
 {
 
-    #[Route('/sessions', name: 'index')]
-    public function index(Request $request, EntityManagerInterface $em): Response
+    #[Route('/sessions', name: 'session.index')]
+    public function index(EntityManagerInterface $em): Response
     {
         $sessions = $em->getRepository(Session::class)->findAll();
 
@@ -26,7 +24,7 @@ class SessionController extends AbstractController
         ]);
     }
 
-    #[Route('/sessions/session-{id}/{filter}', name: 'session_show', defaults: ['filter' => 'all'])]
+    #[Route('/sessions/session-{id}/{filter}', name: 'session.show', defaults: ['filter' => 'all'])]
     public function all_slots_show(int $id, string $filter, EntityManagerInterface $em): Response
     {
         $sessionById = $em->getRepository(Session::class)->find($id);

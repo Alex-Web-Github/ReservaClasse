@@ -1,12 +1,11 @@
 <header>
-  {% set _route = app.request.get('_route') %}
 
   <div
     class="container navbar justify-between bg-base-100 shadow-sm">
     <div
       class="w-64 flex-initial">
       <a
-        href="{{ path('app_home') }}">
+        href="{{ path('home') }}">
         <img
           src="{{ asset('img/logo-ReservaClasse-2.webp')}}" alt="logo Réserva'Classe">
       </a>
@@ -65,23 +64,27 @@
 
         <li>
           <a
-            href="{{ path('app_home') }}" class="menu-{{ _route == 'app_home' ? 'active' : '' }}">
+            href="{{ path('home') }}" class="menu-{{ app.current_route == 'home' ? 'active' : '' }}">
             Accueil
-          </a>
-        </li>
-        <li>
-          <a>
-            Les Réservations
           </a>
         </li>
         <li>
           <a
             href="
-                                          {{ path('index') }}
-                                          "
-            class="menu-
-                                          {{ _route == 'index' ? 'active' : '' }}
-                                          ">
+                                                                                                                                                                                                                                                                              {{ path('eleve.index') }}
+                                                                                                                                                                                                                                                                              "
+            class="menu-{{ app.current_route == 'eleve.index' ? 'active' : '' }}
+                                                                                                                                                                                                                                                                              ">
+
+            Les Elèves
+          </a>
+        </li>
+        <li>
+          <a
+            href="
+                                                                                                                                                                                                                                                                          {{ path('session.index') }}
+                                                                                                                                                                                                                                                                          "
+            class="menu-{{ app.current_route starts with 'session.' ? 'active' : '' }}">
 
             Réserver un créneau
           </a>
@@ -136,7 +139,7 @@
     {% else %}
       <li>
         <a
-          class="menu-{{ _route == 'app_login' ? 'active' : '' }}"
+          class="menu-{{ app.current_route == 'app_login' ? 'active' : '' }}"
           href="{{ path('app_login') }}">
           Connexion
         </a>
