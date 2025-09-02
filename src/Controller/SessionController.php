@@ -26,8 +26,8 @@ class SessionController extends AbstractController
         ]);
     }
 
-    #[Route('/sessions/session-{id}', name: 'session_show')]
-    public function all_slots_show(int $id, EntityManagerInterface $em): Response
+    #[Route('/sessions/session-{id}/{filter}', name: 'session_show', defaults: ['filter' => 'all'])]
+    public function all_slots_show(int $id, string $filter, EntityManagerInterface $em): Response
     {
         $sessionById = $em->getRepository(Session::class)->find($id);
         if (!$sessionById) {
@@ -35,19 +35,20 @@ class SessionController extends AbstractController
         }
 
         $dateSessionBySessionId = $em->getRepository(DateSession::class)->findBy(['session' => $sessionById]);
-        if (!$dateSessionBySessionId) {
+        if (empty($dateSessionBySessionId)) {
             throw $this->createNotFoundException('Aucune date programmée pour cette session');
         }
 
         $eleves = $em->getRepository(Eleve::class)->findAll();
-        if (!$eleves) {
+        if (empty($eleves)) {
             throw $this->createNotFoundException('Aucun élève trouvé');
         }
 
         return $this->render('session/all_slots.html.twig', [
             'sessionId' => $sessionById,
             'dateSessions' => $dateSessionBySessionId,
-            'eleves' => $eleves
+            'eleves' => $eleves,
+            'filter' => $filter,
         ]);
     }
 }

@@ -1,13 +1,26 @@
 {% extends 'base.html.twig' %}
 
+{# Titre dynamique en fonction du filtre #}
+{% if filter == 'all' %}
+  {% set page_title = "Tous les créneaux | Réserva'Classe" %}
+  {% set page_title_h1 = sessionId.label ~ " : tous les créneaux" %}
+{% elseif filter == 'booked' %}
+  {% set page_title = "Les créneaux réservés | Réserva'Classe" %}
+  {% set page_title_h1 = sessionId.label ~ " : les créneaux réservés" %}
+{% else %}
+  {% set page_title = "Les créneaux disponibles | Réserva'Classe" %}
+  {% set page_title_h1 = sessionId.label ~ " : les créneaux disponibles" %}
+{% endif %}
+
+
 {% block title %}
-  Réserver un créneau | Réserva'Classe
+  {{ page_title }}
 {% endblock %}
 
 {% block title_h1 %}
-  {{ sessionId.label }}
-  : les créneaux disponibles
+  {{ page_title_h1 }}
 {% endblock %}
+
 
 {% block body %}
 
@@ -129,10 +142,8 @@
             <div
               class="overflow-x-auto">
 
-              {# Filtrer les slots non réservés #}
-              {% set availableSlots = dateSession.slots|filter(slot => not slot.isBooked) %}
-
-              {% if availableSlots|length > 0 %}
+              {% if filter == 'all' %}
+                {# Afficher tous les créneaux #}
                 <table
                   class="table table-sm md:table-md lg:table-lg table-zebra">
                   <thead>
@@ -141,12 +152,15 @@
                         Horaire
                       </th>
                       <th>
+                        Élève
+                      </th>
+                      <th>
                         Action
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {% for slot in availableSlots %}
+                    {% for slot in dateSession.slots %}
                       <tr>
                         <td
                           class="font-medium">
@@ -169,101 +183,288 @@
                             {{ slot.endTime|date('H:i') }}
                           </div>
                         </td>
+                        <td
+                          class="font-medium">
+                          {{ slot.eleve.fullName|default('Créneau libre') }}
+                        </td>
                         <td>
-
-                          <button
-                            class="btn btn-success btn-sm gap-2 hover:scale-105 transition-transform duration-200"
-                            onclick="openSignupModal('signup_modal_{{ slot.id }}')">
-                            S'inscrire
-                          </button>
-                          <dialog
-                            id="signup_modal_{{ slot.id }}"
-                            class="modal modal-bottom sm:modal-middle">
-                            <div
-                              class="modal-box">
-                              <h3
-                                class="text-lg font-bold">
-                                Réserver un entretien individuel
-                              </h3>
-                              <p
-                                class="py-4">
-                                Voulez-vous réserver le créneau du
-                                {{ dateSession.date|date('d/m/Y') }}
-                                de
-                                {{ slot.startTime|date('H:i') }}
-                                à
-                                {{ slot.endTime|date('H:i') }}
-                                ?
-                              </p>
-                              <form
-                                action="{{ path('slot_reservation', {'id': slot.id}) }}" method="POST"
-                                class="form-control">
-                                <select
-                                  name="eleve"
-                                  class="select select-bordered w-full validator"
-                                  required>
-                                  <option
-                                    disabled
-                                    selected
-                                    value="">
-                                    Choisir un élève :
-                                  </option>
-                                  {% for eleve in eleves %}
-                                    <option
-                                      value="{{ eleve.id }}">
-                                      {{ eleve.fullName }}
-                                    </option>
-                                  {% endfor %}
-                                </select>
+                          {% if not slot.isBooked %}
+                            <button
+                              class="btn btn-success btn-sm gap-2 hover:scale-105 transition-transform duration-200"
+                              onclick="openSignupModal('signup_modal_{{ slot.id }}')">
+                              S'inscrire
+                            </button>
+                            <dialog
+                              id="signup_modal_{{ slot.id }}"
+                              class="modal modal-bottom sm:modal-middle">
+                              <div
+                                class="modal-box">
+                                <h3
+                                  class="text-lg font-bold">
+                                  Réserver un entretien individuel
+                                </h3>
                                 <p
-                                  class="validator-hint">
-                                  obligatoire
+                                  class="py-4">
+                                  Voulez-vous réserver le créneau du
+                                  {{ dateSession.date|date('d/m/Y') }}
+                                  de
+                                  {{ slot.startTime|date('H:i') }}
+                                  à
+                                  {{ slot.endTime|date('H:i') }}
+                                  ?
                                 </p>
+                                <form
+                                  action="{{ path('slot_reservation', {'id': slot.id}) }}" method="POST"
+                                  class="form-control">
+                                  <select
+                                    name="eleve"
+                                    class="select select-bordered w-full validator"
+                                    required>
+                                    <option
+                                      disabled
+                                      selected
+                                      value="">
+                                      Choisir un élève :
+                                    </option>
+                                    {% for eleve in eleves %}
+                                      <option
+                                        value="{{ eleve.id }}">
+                                        {{ eleve.fullName }}
+                                      </option>
+                                    {% endfor %}
+                                  </select>
+                                  <p
+                                    class="validator-hint">
+                                    obligatoire
+                                  </p>
 
-                                <div
-                                  class="modal-action">
-                                  <button
-                                    type="button"
-                                    class="btn btn-error"
-                                    onclick="document.getElementById('signup_modal_{{ slot.id }}').close()">
-                                    Annuler
-                                  </button>
-                                  <button
-                                    type="submit"
-                                    class="btn btn-success">
-                                    Confirmer
-                                  </button>
-                                </div>
-                              </form>
-                            </div>
-                          </dialog>
+                                  <div
+                                    class="modal-action">
+                                    <button
+                                      type="button"
+                                      class="btn btn-error"
+                                      onclick="document.getElementById('signup_modal_{{ slot.id }}').close()">
+                                      Annuler
+                                    </button>
+                                    <button
+                                      type="submit"
+                                      class="btn btn-success">
+                                      Confirmer
+                                    </button>
+                                  </div>
+                                </form>
+                              </div>
+                            </dialog>
+
+                          {% endif %}
                         </td>
                       </tr>
                     {% endfor %}
                   </tbody>
                 </table>
+              {% elseif filter == 'free' %}
+                {# Affichage des créneaux libres #}
+                {% set availableSlots = dateSession.slots|filter(slot => not slot.isBooked) %}
+                {% if availableSlots|length > 0 %}
+                  <table
+                    class="table table-sm md:table-md lg:table-lg table-zebra">
+                    <thead>
+                      <tr>
+                        <th>
+                          Horaire
+                        </th>
+                        <th>
+                          Action
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for slot in availableSlots %}
+                        <tr>
+                          <td
+                            class="font-medium">
+                            <div
+                              class="flex items-center gap-2">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5 text-primary"
+                                fill="none"
+                                viewbox="0 0 24 24"
+                                stroke="currentColor">
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                              </svg>
+                              {{ slot.startTime|date('H:i') }}
+                              -
+                              {{ slot.endTime|date('H:i') }}
+                            </div>
+                          </td>
+                          <td>
+                            <button
+                              class="btn btn-success btn-sm gap-2 hover:scale-105 transition-transform duration-200"
+                              onclick="openSignupModal('signup_modal_{{ slot.id }}')">
+                              S'inscrire
+                            </button>
+                            <dialog
+                              id="signup_modal_{{ slot.id }}"
+                              class="modal modal-bottom sm:modal-middle">
+                              <div
+                                class="modal-box">
+                                <h3
+                                  class="text-lg font-bold">
+                                  Réserver un entretien individuel
+                                </h3>
+                                <p
+                                  class="py-4">
+                                  Voulez-vous réserver le créneau du
+                                  {{ dateSession.date|date('d/m/Y') }}
+                                  de
+                                  {{ slot.startTime|date('H:i') }}
+                                  à
+                                  {{ slot.endTime|date('H:i') }}
+                                  ?
+                                </p>
+                                <form
+                                  action="{{ path('slot_reservation', {'id': slot.id}) }}" method="POST"
+                                  class="form-control">
+                                  <select
+                                    name="eleve"
+                                    class="select select-bordered w-full validator"
+                                    required>
+                                    <option
+                                      disabled
+                                      selected
+                                      value="">
+                                      Choisir un élève :
+                                    </option>
+                                    {% for eleve in eleves %}
+                                      <option
+                                        value="{{ eleve.id }}">
+                                        {{ eleve.fullName }}
+                                      </option>
+                                    {% endfor %}
+                                  </select>
+                                  <p
+                                    class="validator-hint">
+                                    obligatoire
+                                  </p>
+
+                                  <div
+                                    class="modal-action">
+                                    <button
+                                      type="button"
+                                      class="btn btn-error"
+                                      onclick="document.getElementById('signup_modal_{{ slot.id }}').close()">
+                                      Annuler
+                                    </button>
+                                    <button
+                                      type="submit"
+                                      class="btn btn-success">
+                                      Confirmer
+                                    </button>
+                                  </div>
+                                </form>
+                              </div>
+                            </dialog>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                {% else %}
+                  <div
+                    class="alert alert-warning shadow-lg">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="stroke-current shrink-0 h-6 w-6"
+                      fill="none"
+                      viewbox="0 0 24 24">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                    <span>
+                      Aucun créneau disponible pour cette date.
+                    </span>
+                  </div>
+                {% endif %}
+
+
+                {# Affichage des créneaux réservés #}
               {% else %}
-                <div
-                  class="alert alert-warning shadow-lg">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="stroke-current shrink-0 h-6 w-6"
-                    fill="none"
-                    viewbox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                  </svg>
-                  <span>
-                    Aucun créneau disponible pour cette date.
-                  </span>
-                </div>
+                {% set bookedSlots = dateSession.slots|filter(slot => slot.isBooked) %}
+                {% if bookedSlots|length > 0 %}
+                  <table
+                    class="table table-sm md:table-md lg:table-lg table-zebra">
+                    <thead>
+                      <tr>
+                        <th>
+                          Horaire
+                        </th>
+                        <th>
+                          Élève
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for slot in bookedSlots %}
+                        <tr>
+                          <td
+                            class="font-medium">
+                            <div
+                              class="flex items-center gap-2">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5 text-primary"
+                                fill="none"
+                                viewbox="0 0 24 24"
+                                stroke="currentColor">
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                              </svg>
+                              {{ slot.startTime|date('H:i') }}
+                              -
+                              {{ slot.endTime|date('H:i') }}
+                            </div>
+                          </td>
+                          <td
+                            class="font-medium">
+                            {{ slot.eleve.fullName|default('Élève inconnu') }}
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                {% else %}
+                  <div
+                    class="alert alert-warning shadow-lg">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="stroke-current shrink-0 h-6 w-6"
+                      fill="none"
+                      viewbox="0 0 24 24">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      <span>
+                        Aucun créneau réservé pour cette date.
+                      </span>
+                    </svg>
+                  </div>
+                {% endif %}
               {% endif %}
 
             </div>
-
           </div>
         </div>
       </div>
