@@ -34,12 +34,12 @@ class SessionController extends AbstractController
 
         $dateSessionBySessionId = $em->getRepository(DateSession::class)->findBy(['session' => $sessionById]);
         if (empty($dateSessionBySessionId)) {
-            throw $this->createNotFoundException('Aucune date programmée pour cette session');
+            $this->addFlash('warning', 'Aucune date programmée pour cette session');
         }
 
         $eleves = $em->getRepository(Eleve::class)->findAll();
         if (empty($eleves)) {
-            throw $this->createNotFoundException('Aucun élève trouvé');
+            $this->addFlash('warning', 'La liste des élèves n\'est pas renseignée.');
         }
 
         return $this->render('session/all_slots.html.twig', [

@@ -7,6 +7,7 @@ use App\Entity\Slot;
 use App\Entity\Session;
 use App\Entity\User;
 use App\Entity\Eleve;
+use App\Entity\EleveImport;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -14,6 +15,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 
 
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
@@ -52,6 +54,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Les Créneaux', 'fas fa-clock', Slot::class);
         yield MenuItem::section('La Classe');
         yield MenuItem::linkToCrud('Les Elèves', 'fas fa-graduation-cap', Eleve::class);
+        yield MenuItem::linkToCrud('Import Élèves', 'fas fa-file-import', EleveImport::class)->setAction(Action::NEW);
 
         // Options réservées aux administrateurs
         if ($this->isGranted('ROLE_ADMIN')) {

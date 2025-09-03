@@ -13,8 +13,11 @@ class Eleve
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $fullName = null;
+    #[ORM\Column(length: 100)]
+    private ?string $firstName = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $lastName = null;
 
     #[ORM\ManyToOne(inversedBy: 'eleves')]
     #[ORM\JoinColumn(nullable: false)]
@@ -25,16 +28,31 @@ class Eleve
         return $this->id;
     }
 
-    public function getFullName(): ?string
+    public function getFirstName(): ?string
     {
-        return $this->fullName;
+        return $this->firstName;
     }
 
-    public function setFullName(string $fullName): static
+    public function setFirstName(string $firstName): static
     {
-        $this->fullName = $fullName;
-
+        $this->firstName = ucfirst(strtolower($firstName));
         return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): static
+    {
+        $this->lastName = strtoupper($lastName);
+        return $this;
+    }
+
+    public function getFullName(): string
+    {
+        return $this->lastName . ' ' . $this->firstName;
     }
 
     public function getUser(): ?User

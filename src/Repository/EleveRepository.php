@@ -16,6 +16,15 @@ class EleveRepository extends ServiceEntityRepository
         parent::__construct($registry, Eleve::class);
     }
 
+    public function findAllSorted(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->orderBy('e.lastName', 'ASC')
+            ->addOrderBy('e.firstName', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Eleve[] Returns an array of Eleve objects
     //     */
