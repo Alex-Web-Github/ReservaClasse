@@ -24,63 +24,22 @@
 
 {% block body %}
 
-<div
-  class="container">
-  {# Tabs avec role="tablist" #}
   <div
-    role="tablist"
-    class="tabs tabs-border mb-4">
-    {% for dateSession in dateSessions %}
-      <a
-        role="tab"
-        class="tab {{ loop.first ? 'tab-active' : '' }}"
-        onclick="openTab({{ loop.index }})">
-        <span
-          class="flex items-center gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewbox="0 0 24 24"
-            stroke="currentColor">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-          </svg>
-          {{ dateSession.date|date('d/m/Y') }}
-        </span>
-        {% set availableSlots = dateSession.slots|filter(slot => not slot.isBooked) %}
-        {% if availableSlots|length > 0 %}
-          <span
-            class="badge badge-success badge-xs font-semibold ml-2">
-            {{ availableSlots|length }}
-          </span>
-        {% else %}
-          <span
-            class="badge badge-error badge-xs font-semibold ml-2">
-            0
-          </span>
-        {% endif %}
-      </a>
-    {% endfor %}
-  </div>
-
-  {# Contenu de chaque tab avec animation #}
-  {% for dateSession in dateSessions %}
+    class="container">
+    {# Tabs avec role="tablist" #}
     <div
-      id="content-{{ loop.index }}"
-      class="transform transition-all duration-300 ease-in-out {{ not loop.first ? 'hidden opacity-0 scale-95' : 'opacity-100 scale-100' }}">
-      <div
-        class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <div
-          class="card-body">
-          <h2
-            class="card-title text-2xl flex items-center gap-2">
+      role="tablist"
+      class="tabs tabs-border mb-4">
+      {% for dateSession in dateSessions %}
+        <a
+          role="tab"
+          class="tab {{ loop.first ? 'tab-active' : '' }}"
+          onclick="openTab({{ loop.index }})">
+          <span
+            class="flex items-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 text-primary"
+              class="h-5 w-5"
               fill="none"
               viewbox="0 0 24 24"
               stroke="currentColor">
@@ -88,70 +47,232 @@
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
-            {{ dateSession.startTime|date('H:i') }}
-            à
-            {{ dateSession.endTime|date('H:i') }}
-          </h2>
+            {{ dateSession.date|date('d/m/Y') }}
+          </span>
+          {% if filter == 'free' %}
+            {% set availableSlots = dateSession.slots|filter(slot => not slot.isBooked) %}
+            {% if availableSlots|length > 0 %}
+              <span
+                class="badge badge-success badge-xs font-semibold ml-2">
+                {{ availableSlots|length }}
+              </span>
+            {% else %}
+              <span
+                class="badge badge-error badge-xs font-semibold ml-2">
+                0
+              </span>
+            {% endif %}
+          {% endif %}
 
+        </a>
+      {% endfor %}
+    </div>
+
+    {# Contenu de chaque tab avec animation #}
+    {% for dateSession in dateSessions %}
+      <div
+        id="content-{{ loop.index }}"
+        class="transform transition-all duration-300 ease-in-out {{ not loop.first ? 'hidden opacity-0 scale-95' : 'opacity-100 scale-100' }}">
+        <div
+          class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
           <div
-            class="overflow-x-auto">
+            class="card-body">
+            <h2
+              class="card-title text-2xl flex items-center gap-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-primary"
+                fill="none"
+                viewbox="0 0 24 24"
+                stroke="currentColor">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              {{ dateSession.startTime|date('H:i') }}
+              à
+              {{ dateSession.endTime|date('H:i') }}
+            </h2>
 
-            {% if filter == 'all' %}
-              {# Afficher tous les créneaux #}
-              <table
-                class="table table-sm md:table-md lg:table-lg table-zebra">
-                <thead>
-                  <tr>
-                    <th>
-                      Horaire
-                    </th>
-                    <th>
-                      Élève
-                    </th>
-                    <th>
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for slot in dateSession.slots %}
+            <div
+              class="overflow-x-auto">
+
+              {% if filter == 'all' %}
+                {# Afficher tous les créneaux #}
+                <table
+                  class="table table-sm md:table-md lg:table-lg table-zebra">
+                  <thead>
                     <tr>
-                      <td
-                        class="font-medium">
-                        <div
-                          class="flex items-center gap-2">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5 text-primary"
-                            fill="none"
-                            viewbox="0 0 24 24"
-                            stroke="currentColor">
-                            <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                          </svg>
-                          {{ slot.startTime|date('H:i') }}
-                          -
-                          {{ slot.endTime|date('H:i') }}
-                        </div>
-                      </td>
-                      <td
-                        class="font-medium">
-                        {{ slot.eleve.fullName|default('Créneau libre') }}
-                      </td>
-                      <td>
-                        {% if not slot.isBooked %}
+                      <th>
+                        Horaire
+                      </th>
+                      <th>
+                        Élève
+                      </th>
+                      <th>
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for slot in dateSession.slots %}
+                      <tr>
+                        <td
+                          class="font-medium">
+                          <div
+                            class="flex items-center gap-2">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="h-5 w-5 text-primary"
+                              fill="none"
+                              viewbox="0 0 24 24"
+                              stroke="currentColor">
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            {{ slot.startTime|date('H:i') }}
+                            -
+                            {{ slot.endTime|date('H:i') }}
+                          </div>
+                        </td>
+                        <td
+                          class="font-medium">
+                          {{ slot.eleve.fullName|default('Créneau libre') }}
+                        </td>
+                        <td>
+                          {% if not slot.isBooked %}
+                            <button
+                              class="btn btn-success btn-sm gap-2 hover:scale-105 transition-transform duration-200"
+                              onclick="openSignupModal('signup_modal_{{ slot.id }}')">
+                              S'inscrire
+                            </button>
+                            <dialog
+                              id="signup_modal_{{ slot.id }}"
+                              class="modal modal-bottom sm:modal-middle">
+                              <div
+                                class="modal-box">
+                                <h3
+                                  class="text-lg font-bold">
+                                  Réserver un entretien individuel
+                                </h3>
+                                <p
+                                  class="py-4">
+                                  Voulez-vous réserver le créneau du
+                                  {{ dateSession.date|date('d/m/Y') }}
+                                  de
+                                  {{ slot.startTime|date('H:i') }}
+                                  à
+                                  {{ slot.endTime|date('H:i') }}
+                                  ?
+                                </p>
+                                <form
+                                  action="{{ path('slot_reservation', {'id': slot.id}) }}" method="POST"
+                                  class="form-control">
+                                  <select
+                                    name="eleve"
+                                    class="select select-bordered w-full validator"
+                                    required>
+                                    <option
+                                      disabled
+                                      selected
+                                      value="">
+                                      Choisir un élève :
+                                    </option>
+                                    {% for eleve in eleves %}
+                                      <option
+                                        value="{{ eleve.id }}">
+                                        {{ eleve.fullName }}
+                                      </option>
+                                    {% endfor %}
+                                  </select>
+                                  <p
+                                    class="validator-hint">
+                                    obligatoire
+                                  </p>
+
+                                  <div
+                                    class="modal-action">
+                                    <button
+                                      type="button"
+                                      class="btn btn-error"
+                                      onclick="document.getElementById('signup_modal_{{ slot.id }}').close()">
+                                      Annuler
+                                    </button>
+                                    <button
+                                      type="submit"
+                                      class="btn btn-success">
+                                      Confirmer
+                                    </button>
+                                  </div>
+                                </form>
+                              </div>
+                            </dialog>
+                          {% else %}
+                            -
+                          {% endif %}
+                        </td>
+                      </tr>
+                    </td>
+                  </tbody>
+                {% endfor %}
+              </table>
+            {% elseif filter == 'free' %}
+              {# Affichage des créneaux libres #}
+              {% set availableSlots = dateSession.slots|filter(slot => not slot.isBooked) %}
+              {% if availableSlots|length > 0 %}
+                <table
+                  class="table table-sm md:table-md lg:table-lg table-zebra">
+                  <thead>
+                    <tr>
+                      <th>
+                        Horaire
+                      </th>
+                      <th>
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for slot in availableSlots %}
+                      <tr>
+                        <td
+                          class="font-medium">
+                          <div
+                            class="flex items-center gap-2">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="h-5 w-5 text-primary"
+                              fill="none"
+                              viewbox="0 0 24 24"
+                              stroke="currentColor">
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            {{ slot.startTime|date('H:i') }}
+                            -
+                            {{ slot.endTime|date('H:i') }}
+                          </div>
+                        </td>
+                        <td>
                           <button
                             class="btn btn-success btn-sm gap-2 hover:scale-105 transition-transform duration-200"
-                            onclick="openSignupModal('signup_modal_{{ slot.id }}')">
+                            onclick="openSignupModal('modal_{{ slot.id }}')">
                             S'inscrire
                           </button>
+
+                          {# Modal #}
                           <dialog
-                            id="signup_modal_{{ slot.id }}"
+                            id="modal_{{ slot.id }}"
                             class="modal modal-bottom sm:modal-middle">
                             <div
                               class="modal-box">
@@ -169,6 +290,7 @@
                                 {{ slot.endTime|date('H:i') }}
                                 ?
                               </p>
+
                               <form
                                 action="{{ path('slot_reservation', {'id': slot.id}) }}" method="POST"
                                 class="form-control">
@@ -189,6 +311,7 @@
                                     </option>
                                   {% endfor %}
                                 </select>
+
                                 <p
                                   class="validator-hint">
                                   obligatoire
@@ -199,7 +322,7 @@
                                   <button
                                     type="button"
                                     class="btn btn-error"
-                                    onclick="document.getElementById('signup_modal_{{ slot.id }}').close()">
+                                    onclick="document.getElementById('modal_{{ slot.id }}').close()">
                                     Annuler
                                   </button>
                                   <button
@@ -211,421 +334,112 @@
                               </form>
                             </div>
                           </dialog>
-                        {% else %}
-                          -
-                        {% endif %}
-                      </td>
+
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              {% else %}
+                <div
+                  class="alert alert-warning shadow-lg">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="stroke-current shrink-0 h-6 w-6"
+                    fill="none"
+                    viewbox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                  </svg>
+                  <span>
+                    Aucun créneau disponible pour cette date.
+                  </span>
+                </div>
+              {% endif %}
+
+
+              {# Affichage des créneaux réservés #}
+            {% else %}
+              {% set bookedSlots = dateSession.slots|filter(slot => slot.isBooked) %}
+              {% if bookedSlots|length > 0 %}
+                <table
+                  class="table table-sm md:table-md lg:table-lg table-zebra">
+                  <thead>
+                    <tr>
+                      <th>
+                        Horaire
+                      </th>
+                      <th>
+                        Élève
+                      </th>
                     </tr>
-                  </td>
-                </tbody>
-              {% endfor %}
-            </tbody>
-          </table>
-        {% elseif filter == 'free' %}
-          {# Affichage des créneaux libres #}
-          {% set availableSlots = dateSession.slots|filter(slot => not slot.isBooked) %}
-          {% if availableSlots|length > 0 %}
-            <table
-              class="table table-sm md:table-md lg:table-lg table-zebra">
-              <thead>
-                <tr>
-                  <th>
-                    Horaire
-                  </th>
-                  <th>
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for slot in availableSlots %}
-                  <tr>
-                    <td
-                      class="font-medium">
-                      <div
-                        class="flex items-center gap-2">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="h-5 w-5 text-primary"
-                          fill="none"
-                          viewbox="0 0 24 24"
-                          stroke="currentColor">
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        {{ slot.startTime|date('H:i') }}
-                        -
-                        {{ slot.endTime|date('H:i') }}
-                      </div>
-                    </td>
-                    <td>
-                      <button
-                        class="btn btn-success btn-sm gap-2 hover:scale-105 transition-transform duration-200"
-                        onclick="openSignupModal('signup_modal_{{ slot.id }}')">
-                        S'inscrire
-                      </button>
-                      <dialog
-                        id="signup_modal_{{ slot.id }}"
-                        class="modal modal-bottom sm:modal-middle">
-                        <div
-                          class="modal-box">
-                          <h3
-                            class="text-lg font-bold">
-                            Réserver un entretien individuel
-                          </h3>
-                          <p
-                            class="py-4">
-                            Voulez-vous réserver le créneau du
-                            {{ dateSession.date|date('d/m/Y') }}
-                            de
+                  </thead>
+                  <tbody>
+                    {% for slot in bookedSlots %}
+                      <tr>
+                        <td
+                          class="font-medium">
+                          <div
+                            class="flex items-center gap-2">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="h-5 w-5 text-primary"
+                              fill="none"
+                              viewbox="0 0 24 24"
+                              stroke="currentColor">
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
                             {{ slot.startTime|date('H:i') }}
-                            à
+                            -
                             {{ slot.endTime|date('H:i') }}
-                            ?
-                          </p>
-                          <form
-                            action="{{ path('slot_reservation', {'id': slot.id}) }}" method="POST"
-                            class="form-control">
-                            <select
-                              name="eleve"
-                              class="select select-bordered w-full validator"
-                              required>
-                              <option
-                                disabled
-                                selected
-                                value="">
-                                Choisir un élève :
-                              </option>
-                              {% for eleve in eleves %}
-                                <option
-                                  value="{{ eleve.id }}">
-                                  {{ eleve.fullName }}
-                                </option>
-                              {% endfor %}
-                            </select>
-                            <p
-                              class="validator-hint">
-                              obligatoire
-                            </p>
+                          </div>
+                        </td>
+                        <td
+                          class="font-medium">
+                          {{ slot.eleve.fullName|default('Élève inconnu') }}
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              {% else %}
+                <div
+                  class="alert alert-warning shadow-lg">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="stroke-current shrink-0 h-6 w-6"
+                    fill="none"
+                    viewbox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    <span>
+                      Aucun créneau réservé pour cette date.
+                    </span>
+                  </svg>
+                </div>
+              {% endif %}
+            {% endif %}
 
-                            <div
-                              class="modal-action">
-                              <button
-                                type="button"
-                                class="btn btn-error"
-                                onclick="document.getElementById('signup_modal_{{ slot.id }}').close()">
-                                Annuler
-                              </button>
-                              <button
-                                type="submit"
-                                class="btn btn-success">
-                                Confirmer
-                              </button>
-                            </div>
-                          </form>
-                        </div>
-                      </dialog>
-                    </td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          {% else %}
-            <div
-              class="alert alert-warning shadow-lg">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="stroke-current shrink-0 h-6 w-6"
-                fill="none"
-                viewbox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-              </svg>
-              <span>
-                Aucun créneau disponible pour cette date.
-              </span>
-            </div>
-          {% endif %}
-
-
-          {# Affichage des créneaux réservés #}
-        {% else %}
-          {% set bookedSlots = dateSession.slots|filter(slot => slot.isBooked) %}
-          {% if bookedSlots|length > 0 %}
-            <table
-              class="table table-sm md:table-md lg:table-lg table-zebra">
-              <thead>
-                <tr>
-                  <th>
-                    Horaire
-                  </th>
-                  <th>
-                    Élève
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for slot in bookedSlots %}
-                  <tr>
-                    <td
-                      class="font-medium">
-                      <div
-                        class="flex items-center gap-2">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="h-5 w-5 text-primary"
-                          fill="none"
-                          viewbox="0 0 24 24"
-                          stroke="currentColor">
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        {{ slot.startTime|date('H:i') }}
-                        -
-                        {{ slot.endTime|date('H:i') }}
-                      </div>
-                    </td>
-                    <td
-                      class="font-medium">
-                      {{ slot.eleve.fullName|default('Élève inconnu') }}
-                    </td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          {% else %}
-            <div
-              class="alert alert-warning shadow-lg">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="stroke-current shrink-0 h-6 w-6"
-                fill="none"
-                viewbox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                <span>
-                  Aucun créneau réservé pour cette date.
-                </span>
-              </svg>
-            </div>
-          {% endif %}
-        {% endif %}
-
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>{% endfor %}<script>
-function openSignupModal( modalId ) {
-
-
-
-
-
-  const modal = document
-    .getElementById( modalId );
-  if ( modal ) {
-
-
-
-
-
-    modal
-      .showModal();
-
-
-
-
-
-  }
-
-}
-
-// Ajout des écouteurs d'événements pour toutes les modales
-document
-  .addEventListener( 'DOMContentLoaded', function () {
-
-
-
-
-
-    const modals = document
-      .querySelectorAll( 'dialog.modal' );
-    modals
-      .forEach( modal => { // Fermer la modale avec la touche Escape
-        modal
-          .addEventListener( 'keydown', function ( event ) {
-
-
-
-
-
-            if ( event
-                .key === 'Escape' ) {
-
-
-
-
-
-              modal
-                .close();
-
-
-
-
-
-            }
-
-          } );
-
-        // Fermer la modale en cliquant en dehors
-        modal
-          .addEventListener( 'click', function ( event ) {
-
-
-
-
-
-            if ( event
-                .target === modal ) {
-
-
-
-
-
-              modal
-                .close();
-
-
-
-
-
-            }
-
-          } );
-
-
-
-
-
-      } );
-
-
-
-
-
-  } );
-
-function openTab( index ) { // Sélectionner tous les contenus
-  const contents = document
-    .querySelectorAll( '[id^="content-"]' );
-  const tabs = document
-    .querySelectorAll( '[role="tab"]' );
-
-  // Animer la sortie du contenu actuel
-  contents
-    .forEach( content => {
-
-
-
-
-
-      if ( !content
-          .classList
-            .contains( 'hidden' ) ) {
-
-
-
-
-
-        content
-          .classList
-          .add( 'opacity-0', 'scale-95' );
-        setTimeout( () => {
-
-
-
-
-
-          content
-            .classList
-            .add( 'hidden' );
-
-
-
-
-
-        }, 300 );
-
-
-
-
-
-      }
-
-    } );
-
-  // Désactiver tous les onglets
-  tabs
-    .forEach( tab => tab
-      .classList
-      .remove( 'tab-active' ) );
-
-  // Activer le nouvel onglet
-  tabs[index - 1]
-    .classList
-    .add( 'tab-active' );
-
-  // Animer l'entrée du nouveau contenu
-  setTimeout( () => {
-
-
-
-
-
-    const selectedContent = document
-      .getElementById( 'content-' + index );
-    selectedContent
-      .classList
-      .remove( 'hidden' );
-    requestAnimationFrame( () => {
-
-
-
-
-
-      selectedContent
-        .classList
-        .remove( 'opacity-0', 'scale-95' );
-      selectedContent
-        .classList
-        .add( 'opacity-100', 'scale-100' );
-
-
-
-
-
-    } );
-
-
-
-
-
-  }, 300 );
-
-
-
-
-
-}</script>{% endblock %}
+  {% endfor %}
+  {# Rendre les fonctions disponibles globalement #}
+  <script
+    type="module">
+    import { openSignupModal, openTab } from '{{ asset('js/custom.js') }}';
+    Object
+      .assign( window, { openSignupModal, openTab } );
+  </script>
+{% endblock %}

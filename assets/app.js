@@ -6,6 +6,7 @@ import './bootstrap.js';
  * which should already be in your base.html.twig.
  */
 
+// Import my JS files
+import './js/custom.js';
 // Import your CSS files here
 import './styles/app.css';
-
