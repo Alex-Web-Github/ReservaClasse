@@ -14,7 +14,11 @@
   <div
     class="hero-content flex-col-reverse lg:flex-row-reverse">
     <img
-      src="{{ asset('img/parents-enseignants-800W.webp') }}" alt="Parents et Enseignants"
+      src="
+                                                                                                                                                                                {{ asset('img/photo-classe-2025.jpeg') }}
+                                                                                                                                                                                "
+      alt="photo de classe"
+
       class="max-w-3xs md:max-w-2xs lg:max-w-sm rounded-lg shadow-2xl"/>
 
     <div
@@ -25,11 +29,15 @@
 
         {{ message | nl2br }}
       </p>
-      <div>
+      <div
+        class="text-center md:text-left md:mt-4 w-full fixed bottom-5 md:static">
+
+
         <a
           href="
-                                                                                                                                                                                                                                                                  {{ path('session.index') }}                                                                                                                                                                           "
-          class="btn btn-primary">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          {{ path('session.index') }}                                                                                                                                                                           "
+          class="btn btn-primary btn-xl">
+
 
           Réserver un créneau
         </a>

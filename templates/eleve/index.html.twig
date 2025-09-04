@@ -11,9 +11,11 @@
 
 {% block body %}
   <div
-    class="container">
+    class="container h-96 overflow-x-auto pt-0">
+
     <table
-      class="table table-sm md:table-md lg:table-lg table-zebra">
+      class="table table-sm md:table-md lg:table-lg table-zebra table-pin-rows">
+
       <thead>
         <tr>
           <th>
@@ -36,15 +38,10 @@
                 {{ eleveSlots[eleve.id].startTime|date('d/m/Y H:i') }}
               {% else %}
                 <a
-                  href="
-                                                                                                                                                                                                                                                                              {{ path('session.index') }}
-                                                                                                                                                                                                                                                                            "
-                  class="btn btn-primary">
+                  href="{{ path('session.index') }}" class="btn btn-primary">
 
                   S'inscrire
                 </a>
-
-
               {% endif %}
             </td>
           </tr>

@@ -91,28 +91,28 @@
       {% endblock %}
     {% endblock %}
   </head>
-  <body>
+  <body
+    class="min-h-screen flex flex-col">
 
     {% include "_header.html.twig" %}
 
     <main>
       <div
-        class="container">
+        class="bg-base-100 mx-auto max-w-7xl p-0 py-8 mb-8">
         <div
-          class="bg-base-100 mx-auto max-w-7xl p-0 md:py-8">
-          <div
-            class="text-center">
-            <h1
-              class="text-xl md:text-3xl xl:text-5xl font-bold mt-4 md:my-8">
-              {% block title_h1 %}{% endblock %}
-              </h1>
-            </div>
+          class="text-center my-4 md:my-8">
+          <h1
+            class="text-xl md:text-3xl xl:text-5xl font-bold">
+            {% block title_h1 %}{% endblock %}
+            </h1>
+          </div>
 
-            {# Messages Flash #}
-            {% for label, messages in app.flashes %}
+          {# Messages Flash #}
+          {% for label, messages in app.flashes %}
 
-              {% for message in messages %}
-
+            {% for message in messages %}
+              <div
+                class="container">
                 <div
                   class="alert alert-{{ label }} shadow-lg mb-4">
                   <span>
@@ -148,17 +148,16 @@
                     {{ message }}
                   </span>
                 </div>
-
-              {% endfor %}
+              </div>
             {% endfor %}
+          {% endfor %}
 
-            {% block body %}
-            {% endblock %}
-          </div>
+          {% block body %}
+          {% endblock %}
         </div>
-      </main>
-
-      {% include "_footer.html.twig" %}
-
+      </div>
     </body>
   </html>
+</main>
+
+{% include "_footer.html.twig" %}</body></html>
