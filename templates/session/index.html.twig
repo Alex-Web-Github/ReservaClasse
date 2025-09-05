@@ -14,46 +14,50 @@
     class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
     {% for session in sessions %}
       <div
-        class="card bg-base-100 shadow-md">
+        class="card bg-base-100 shadow-lg">
         <div
           class="card-body gap-8">
           <div>
-            <p
-              class="">
-              Enseignant :
+            <div
+              class="mb-2 md:text-center">
+              <h2
+                class="badge badge-md md:badge-xl badge-secondary mb-4">
+                {{ session.label }}
+              </h2>
+            </div>
+            <div
+              class="mb-[3rem]">
               <span>
+                Enseignant :
+              </span>
+              <span
+                class="badge badge-sm md:badge-md badge-neutral font-bold">
                 {{ session.teacher.fullName|default('Enseignant inconnu') }}
               </span>
-            </p>
-            <h2
-              class="card-title">
-
-              {{ session.label }}
-            </h2>
-          </div>
-          <div
-            class="card-actions justify-end">
-            <a
-              href="
-                                                                                                                                                                                                              {{ path('session.show', { id: session.id, filter: 'booked' }) }}
-                                                                                                                                                                                                            "
-              class="btn btn-neutral btn-outline">
+            </div>
+            <div
+              class="card-actions justify-end">
+              <a
+                href="
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{ path('session.show', { id: session.id, filter: 'all' }) }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  "
+                class="btn btn-neutral btn-outline">
 
 
-              Voir les inscrits
-            </a>
-            <a
-              href="
-                                                                                                                                                                                                              {{ path('session.show', { id: session.id, filter: 'free' }) }}
-                                                                                                                                                                                                            "
-              class="btn btn-primary">
+                Voir les inscrits
+              </a>
+              <a
+                href="
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{ path('session.show', { id: session.id, filter: 'free' }) }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  "
+                class="btn btn-primary">
 
-              S'inscrire
-            </a>
+                S'inscrire
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-    {% endfor %}
-  </div>
+      {% endfor %}
+    </div>
 
-{% endblock %}
+  {% endblock %}

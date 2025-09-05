@@ -1,0 +1,62 @@
+{# Modal centrée, fond sombre #}
+
+<dialog
+  id="modal_{{ slot.id }}"
+  class="modal">
+  <div
+    class="modal-box w-auto flex flex-col justify-center items-center bg-base-100 shadow-lg">
+    <h3
+      class="text-lg font-bold mb-4">
+      Réserver un entretien individuel
+    </h3>
+    <p
+      class="py-4">
+      Voulez-vous réserver le créneau du
+      {{ dateSession.date|date('d/m/Y') }}
+      de
+      {{ slot.startTime|date('H:i') }}
+      à
+      {{ slot.endTime|date('H:i') }}
+      ?
+    </p>
+    <form
+      action="{{ path('slot_reservation', {'id': slot.id}) }}" method="POST"
+      class="form-control w-full max-w-md mx-auto">
+      <select
+        name="eleve"
+        class="select select-bordered w-full validator"
+        required>
+        <option
+          disabled
+          selected
+          value="">
+          Choisir un élève :
+        </option>
+        {% for eleve in eleves %}
+          <option
+            value="{{ eleve.id }}">
+            {{ eleve.fullName }}
+          </option>
+        {% endfor %}
+      </select>
+      <p
+        class="validator-hint">
+        obligatoire
+      </p>
+      <div
+        class="modal-action flex justify-center gap-4 mt-6">
+        <button
+          type="button"
+          class="btn btn-error"
+          onclick="document.getElementById('modal_{{ slot.id }}').close()">
+          Annuler
+        </button>
+        <button
+          type="submit"
+          class="btn btn-success">
+          Confirmer
+        </button>
+      </div>
+    </form>
+  </div>
+</dialog>

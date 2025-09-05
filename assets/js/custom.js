@@ -1,7 +1,12 @@
 // Ouvre une modal d'inscription par son ID
 export function openSignupModal(modalId) {
   const modal = document.getElementById(modalId);
-  modal?.show();
+  if (modal) {
+    modal.showModal(); // Changement de show() à showModal()
+    console.log('Modal ouverte:', modalId); // Debug
+  } else {
+    console.error('Modal non trouvée:', modalId); // Debug
+  }
 }
 
 // Ouvre un onglet par son index

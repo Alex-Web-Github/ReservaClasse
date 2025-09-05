@@ -89,7 +89,14 @@
       {% block importmap %}
         {{ importmap('app') }}
       {% endblock %}
+      <script
+        type="module">
+        // Rendre les fonctions disponibles globalement
+        Object
+          .assign( window, await import ( '{{ asset('js/custom.js') }}' ) );
+      </script>
     {% endblock %}
+
   </head>
   <body
     class="min-h-screen flex flex-col">
@@ -101,6 +108,8 @@
         class="bg-base-100 mx-auto max-w-7xl p-0 py-8 mb-8">
         <div
           class="text-center my-4 md:my-8">
+          {% block session_label %}{% endblock %}
+
           <h1
             class="text-xl md:text-3xl xl:text-5xl font-bold">
             {% block title_h1 %}{% endblock %}
@@ -155,9 +164,7 @@
           {% block body %}
           {% endblock %}
         </div>
-      </div>
+      </body>
     </body>
   </html>
-</main>
-
-{% include "_footer.html.twig" %}</body></html>
+</div></body></html></main>{% include "_footer.html.twig" %}</body></html>

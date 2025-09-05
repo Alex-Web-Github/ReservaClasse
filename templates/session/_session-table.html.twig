@@ -1,0 +1,76 @@
+{# Tableau des créneaux #}
+<table
+  class="table table-sm md:table-md lg:table-lg table-zebra">
+  <thead>
+    <tr>
+      <th>
+        Horaire
+      </th>
+      {% if filter == 'all' %}
+        {% set bookedSlots = dateSession.slots|filter(slot => slot.isBooked)|length %}
+        {% if bookedSlots > 0 %}
+          <th>
+            Élève
+          </th>
+        {% else %}
+          <th></th>
+        {% endif %}
+      {% endif %}
+      <th>
+        Action
+      </th>
+    </tr>
+  </thead>
+
+</tr></thead></tr></thead><tbody>{% for slot in dateSession.slots %}<tr>
+<td
+  class="font-medium">
+  <div
+    class="flex items-center gap-2">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-5 w-5 text-primary"
+      fill="none"
+      viewbox="0 0 24 24"
+      stroke="currentColor">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+    </svg>
+    {{ slot.startTime|date('H:i') }}
+    -
+    {{ slot.endTime|date('H:i') }}
+  </div>
+</td>
+{% if filter == 'all' %}
+  <td
+    class="font-medium">
+    {{ slot.eleve.fullName|default('') }}
+  </td>
+{% endif %}
+<td>
+  {% if not slot.isBooked %}
+    <button
+      class="btn btn-success btn-md lg:btn-lg gap-2 hover:scale-105 transition-transform duration-200"
+      onclick="openSignupModal('modal_{{ slot.id }}')">
+      S'inscrire
+    </button>
+
+    {% include 'session/_signup_modal.html.twig' with {
+              'slot': slot,
+              'dateSession': dateSession,
+              'eleves': eleves
+            } only %}
+
+  {% else %}
+    <button
+      class="btn btn-md lg:btn-lg btn-disabled"
+      tabindex="-1"
+      role="button"
+      aria-disabled="true">
+      Réservé
+    </button>
+  {% endif %}
+</td></tr>{% endfor %}</tbody></tbody></table>
