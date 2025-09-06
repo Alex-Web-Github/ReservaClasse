@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Eleve;
 use App\Entity\User;
+use App\Entity\Slot;
 use Doctrine\ORM\EntityManagerInterface;
 
 class EleveImportService
@@ -17,13 +18,28 @@ class EleveImportService
         $results = ['success' => [], 'errors' => []];
 
         try {
-            // Supprimer tous les élèves existants
+            // D'abord, supprimer les réservations existantes
+            $slots = $this->entityManager->getRepository(Slot::class)
+                ->createQueryBuilder('s')
+                ->join('s.eleve', 'e')
+                ->where('e.user = :user')
+                ->setParameter('user', $user)
+                ->getQuery()
+                ->getResult();
+
+            foreach ($slots as $slot) {
+                $slot->setEleve(null);
+                $slot->setIsBooked(false);
+            }
+
+            // Ensuite, supprimer les élèves
             $existingEleves = $this->entityManager->getRepository(Eleve::class)
                 ->findBy(['user' => $user]);
 
             foreach ($existingEleves as $eleve) {
                 $this->entityManager->remove($eleve);
             }
+
             $this->entityManager->flush();
 
             // Import des nouveaux élèves
@@ -39,7 +55,8 @@ class EleveImportService
                     continue;
                 }
 
-                $lastName = array_pop($nameParts);
+                // Modification ici : le premier mot est le nom de famille
+                $lastName = array_shift($nameParts);
                 $firstName = implode(' ', $nameParts);
 
                 $eleve = new Eleve();
@@ -48,7 +65,7 @@ class EleveImportService
                 $eleve->setUser($user);
 
                 $this->entityManager->persist($eleve);
-                $results['success'][] = "Élève ajouté : $firstName $lastName";
+                $results['success'][] = "Élève ajouté : $lastName $firstName";
             }
 
             $this->entityManager->flush();
