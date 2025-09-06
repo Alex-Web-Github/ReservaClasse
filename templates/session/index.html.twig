@@ -37,19 +37,19 @@
             </div>
             <div
               class="card-actions justify-end">
+              {# <a
+                                                          href="
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              {{ path('session.show', { id: session.id, filter: 'all' }) }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            "
+                                                          class="btn btn-neutral btn-outline">
+              
+              
+                                                          Voir les inscrits
+                                                        </a> #}
               <a
                 href="
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{ path('session.show', { id: session.id, filter: 'all' }) }}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  "
-                class="btn btn-neutral btn-outline">
-
-
-                Voir les inscrits
-              </a>
-              <a
-                href="
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{ path('session.show', { id: session.id, filter: 'free' }) }}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  "
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          {{ path('session.show', { id: session.id, filter: 'free' }) }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        "
                 class="btn btn-primary">
 
                 S'inscrire
@@ -57,7 +57,8 @@
             </div>
           </div>
         </div>
-      {% endfor %}
-    </div>
+      </div>
+    {% endfor %}
+
 
   {% endblock %}

@@ -107,15 +107,15 @@
       <div
         class="bg-base-100 mx-auto max-w-7xl p-0 py-8 mb-8">
         <div
-          class="text-center my-4 md:my-8">
+          class="text-center my-4 xl:my-[4rem]">
           {% block session_label %}{% endblock %}
 
           <h1
             class="text-xl md:text-3xl xl:text-5xl font-bold">
             {% block title_h1 %}{% endblock %}
             </h1>
-          </div>
 
+          </div>
           {# Messages Flash #}
           {% for label, messages in app.flashes %}
 

@@ -15,22 +15,38 @@ class EleveController extends AbstractController
     #[Route('/eleves', name: 'eleve.index', methods: ['GET'])]
     public function index(EntityManagerInterface $em): Response
     {
-
         $eleves = $em->getRepository(Eleve::class)->findAll();
         if (empty($eleves)) {
             $this->addFlash('info', 'Aucun élève trouvé.');
         }
 
-        $slots = $em->getRepository(Slot::class)->findAll();
+        // Optimisation de la requête avec les jointures
+        $slots = $em->getRepository(Slot::class)
+            ->createQueryBuilder('s')
+            ->leftJoin('s.dateSession', 'ds')
+            ->addSelect('ds')
+            ->leftJoin('ds.session', 'sess')  // Ajout de la jointure avec Session
+            ->addSelect('sess')               // Sélection de la session
+            ->leftJoin('s.eleve', 'e')
+            ->addSelect('e')
+            ->orderBy('ds.date', 'ASC')
+            ->addOrderBy('s.startTime', 'ASC')
+            ->getQuery()
+            ->getResult();
+
         if (empty($slots)) {
             $this->addFlash('info', 'Aucun créneau trouvé.');
         }
 
-        // Créer un tableau associatif eleveId => slot
+        // Création d'un tableau multidimensionnel eleveId => [slots]
         $eleveSlots = [];
         foreach ($slots as $slot) {
             if ($slot->getEleve()) {
-                $eleveSlots[$slot->getEleve()->getId()] = $slot;
+                $eleveId = $slot->getEleve()->getId();
+                if (!isset($eleveSlots[$eleveId])) {
+                    $eleveSlots[$eleveId] = [];
+                }
+                $eleveSlots[$eleveId][] = $slot;
             }
         }
 

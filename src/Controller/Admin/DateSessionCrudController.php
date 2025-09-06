@@ -77,9 +77,11 @@ class DateSessionCrudController extends AbstractCrudController
                 })
                 ->setRequired(true)
                 ->setFormTypeOptions([
-                    'placeholder' => 'Choisissez une session d\'entretien',
+                    'placeholder' => 'Choisissez une session',
                     'attr' => ['data-validation-required-message' => 'Veuillez sélectionner une session'],
-                ]),
+                    'help' => 'Sélectionnez la session à laquelle cette date appartient.',
+                ])
+                ->setLabel('Associer cette journée à une session'),
             DateField::new('date')
                 ->setFormat('dd/MM/yyyy')
                 ->setFormTypeOption('widget', 'single_text'),

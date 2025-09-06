@@ -1,27 +1,25 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-  Liste des élèves
+  Vos rendez-vous
 {% endblock %}
 
 {% block title_h1 %}
-  Liste des élèves
+  Vos rendez-vous
 {% endblock %}
-
 
 {% block body %}
   <div
-    class="container h-96 overflow-x-auto pt-0">
+    class="container h-96 overflow-x-auto pt-0 px-2 md:px-4  shadow-lg">
     <table
       class="table table-sm md:table-md lg:table-lg table-zebra table-pin-rows">
-
       <thead>
         <tr>
           <th>
-            Nom Prénom
+            Votre enfant
           </th>
           <th>
-            Date/heure de l'entretien
+            Date / Horaire
           </th>
         </tr>
       </thead>
@@ -34,15 +32,38 @@
             </td>
             <td>
               {% if eleveSlots[eleve.id] is defined %}
-                {{ eleveSlots[eleve.id].startTime|date('d/m/Y H:i') }}
+                {% for slot in eleveSlots[eleve.id] %}
+                  <div
+                    class="flex flex-col gap-1 mb-3">
+                    <div
+                      class="badge badge-secondary">
+                      {{ slot.dateSession.session.label }}
+                    </div>
+                    <div
+                      class="flex items-center gap-2">
+                      <span
+                        class="text-sm">
+                        {{ slot.dateSession.date|date('d/m/Y') }}
+                      </span>
+                      <span
+                        class="text-sm">
+                        (
+                        {{ slot.startTime|date('H:i') }}
+                        à
+                        {{ slot.endTime|date('H:i')}}
+                        )
+                      </span>
+                    </div>
+                  </div>
+                {% endfor %}
               {% else %}
                 <a
-                  href="{{ path('session.index') }}" class="btn btn-primary">
-
+                  href="{{ path('session.index') }}" class="btn btn-primary btn-sm">
                   S'inscrire
                 </a>
               {% endif %}
             </td>
+
           </tr>
         {% endfor %}
       </tbody>

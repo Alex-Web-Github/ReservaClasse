@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\Slot;
 use App\Entity\Eleve;
+use App\Entity\DateSession;
+use App\Entity\Session;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -29,9 +31,9 @@ class SlotCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setPageTitle('index', 'Créneaux')
-            ->setPageTitle('new', 'Créer un créneau')
-            ->setPageTitle('edit', 'Modifier un créneau')
+            ->setPageTitle('index', 'Les rendez-vous')
+            ->setPageTitle('new', 'Créer un rendez-vous')
+            ->setPageTitle('edit', 'Modifier un rendez-vous')
             ->setDefaultSort(['dateSession.date' => 'ASC', 'startTime' => 'ASC']);
     }
 
@@ -51,6 +53,12 @@ class SlotCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
+            AssociationField::new('dateSession', 'Session')
+                ->hideOnForm()
+                ->setFormTypeOption('disabled', true)  // Alternative à hideOnForm
+                ->formatValue(function ($value, $entity) {
+                    return $entity->getDateSession()->getSession() ? $entity->getDateSession()->getSession() : '';
+                }),
             TimeField::new('startTime', 'Heure de début')
                 ->setFormTypeOption('widget', 'single_text'),
             TimeField::new('endTime', 'Heure de fin')
@@ -63,8 +71,12 @@ class SlotCrudController extends AbstractCrudController
                     return $entity->getEleve() ? $entity->getEleve()->getFullName() : '';
                 })
                 ->setHelp('Sélectionnez l\'élève pour ce créneau'),
-            AssociationField::new('dateSession', 'Date de session')
+            AssociationField::new('dateSession', 'Date')
                 ->hideOnForm()
+                ->setFormTypeOption('disabled', true)  // Alternative à hideOnForm
+                ->formatValue(function ($value, $entity) {
+                    return $entity->getDateSession() ? $entity->getDateSession()->getDate()->format('d/m/Y') : '';
+                })
         ];
     }
 }

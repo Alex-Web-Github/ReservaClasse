@@ -17,7 +17,7 @@ export function openTab(index) {
   // Masquer tous les contenus
   contents.forEach((content) => {
     if (!content.classList.contains('hidden')) {
-      content.classList.add('opacity-0', 'scale-95');
+      content.classList.add('opacity-0');
       setTimeout(() => content.classList.add('hidden'), 300);
     }
   });
@@ -36,8 +36,8 @@ export function openTab(index) {
     if (selectedContent) {
       selectedContent.classList.remove('hidden');
       requestAnimationFrame(() => {
-        selectedContent.classList.remove('opacity-0', 'scale-95');
-        selectedContent.classList.add('opacity-100', 'scale-100');
+        selectedContent.classList.remove('opacity-0');
+        selectedContent.classList.add('opacity-100');
       });
     }
   }, 300);

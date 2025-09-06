@@ -30,60 +30,72 @@
 {% block body %}
 
   <div
-    class="container">
+    class="container p-2 md:p-4">
+
+
     {# Tabs avec role="tablist" #}
     <div
-      role="tablist"
-      class="tabs tabs-border mb-4">
-      {% for dateSession in dateSessions %}
-        <a
-          role="tab"
-          class="tab {{ loop.first ? 'tab-active' : '' }}"
-          onclick="openTab({{ loop.index }})">
-          <span
-            class="flex items-center gap-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              fill="none"
-              viewbox="0 0 24 24"
-              stroke="currentColor">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-            </svg>
-            {{ dateSession.date|date('d/m/Y') }}
-          </span>
-          {% if filter in ['free', 'all'] %}
-            {% set availableSlots = dateSession.slots|filter(slot => not slot.isBooked) %}
-            {% if availableSlots|length > 0 %}
-              <span
-                class="badge badge-success badge-xs font-semibold ml-2 tooltip tooltip-success"
-                data-tip="Créneaux disponibles">
+      class="relative">
+      <div
+        role="tablist"
+        class="tabs tabs-border mb-4 flex-nowrap overflow-x-auto">
+        {% for dateSession in dateSessions %}
+          <a
+            role="tab"
+            class="tab
+                                                                                                                              {{ loop.first ? 'tab-active' : '' }}
+                                                                                                                              flex-nowrap"
+            onclick="openTab({{ loop.index }})">
+            <span
+              class="flex items-center gap-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewbox="0 0 24 24"
+                stroke="currentColor">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+              {{ dateSession.date|date('d/m/Y') }}
+            </span>
+            {% if filter in ['free', 'all'] %}
+              {% set availableSlots = dateSession.slots|filter(slot => not slot.isBooked) %}
+              {% if availableSlots|length > 0 %}
+                <span
+                  class="badge badge-success badge-xs font-semibold ml-2 tooltip tooltip-success tooltip-right"
 
-                {{ availableSlots|length }}
-              </span>
-            {% else %}
-              <span
-                class="badge badge-error badge-xs font-semibold ml-2 tooltip tooltip-error"
-                data-tip="Aucun créneau disponible">
-                0
-              </span>
+                  data-tip="Créneaux disponibles">
 
+                  {{ availableSlots|length }}
+                </span>
+              {% else %}
+                <span
+                  class="badge badge-error badge-xs font-semibold ml-2 tooltip tooltip-error tooltip-right"
+
+                  data-tip="Pas de créneau disponible">
+                  0
+                </span>
+              {% endif %}
             {% endif %}
-          {% endif %}
 
-        </a>
-      {% endfor %}
+          </a>
+        {% endfor %}
+      </div>
+      {# gradient opaque pour inciter à scroller sur Mobile #}
+      <div
+        class="tabs-gradient"></div>
     </div>
+
 
     {# Contenu de chaque tab avec animation #}
     {% for dateSession in dateSessions %}
       <div
         id="content-{{ loop.index }}"
-        class="transform transition-all duration-300 ease-in-out {{ not loop.first ? 'hidden opacity-0 scale-95' : 'opacity-100 scale-100' }}">
+        class="transform transition-all duration-300 ease-in-out {{ not loop.first ? 'hidden opacity-0' : 'opacity-100' }}">
         <div
           class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
           <div
