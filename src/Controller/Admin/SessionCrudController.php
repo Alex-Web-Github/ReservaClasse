@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use Doctrine\ORM\EntityManagerInterface;
 
 class SessionCrudController extends AbstractCrudController
 {
@@ -22,6 +23,22 @@ class SessionCrudController extends AbstractCrudController
         $session = new Session();
         $session->setTeacher($this->getUser());
         return $session;
+    }
+
+    public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if (!$entityInstance instanceof Session) {
+            return;
+        }
+
+        // Détacher les DateSessions de la Session
+        foreach ($entityInstance->getDates() as $dateSession) {
+            $dateSession->setSession(null);
+            $entityManager->persist($dateSession);
+        }
+
+        $entityManager->remove($entityInstance);
+        $entityManager->flush();
     }
 
     public function configureCrud(Crud $crud): Crud

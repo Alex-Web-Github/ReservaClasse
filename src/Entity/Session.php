@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use Assert\NotNull;
 use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+
 
 #[ORM\Entity]
 class Session
@@ -33,7 +33,8 @@ class Session
     #[Assert\PositiveOrZero(message: 'L\'intervalle doit être positif ou nul')]
     private int $slotInterval;
 
-    #[ORM\OneToMany(mappedBy: 'session', targetEntity: DateSession::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'session', targetEntity: DateSession::class)]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
     private Collection $dates;
 
     public function __construct()
