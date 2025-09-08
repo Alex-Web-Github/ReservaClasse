@@ -32,16 +32,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $adminCode = null;
 
-    #[ORM\OneToMany(mappedBy: 'teacher', targetEntity: Session::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'user',
+        targetEntity: Session::class,
+        cascade: ['remove'],
+        orphanRemoval: true
+    )]
     private Collection $sessions;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Eleve::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'user',
+        targetEntity: Eleve::class,
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
     private Collection $eleves;
+
+    #[ORM\OneToMany(
+        mappedBy: 'user',
+        targetEntity: EleveImport::class,
+        cascade: ['remove'],
+        orphanRemoval: true
+    )]
+    private Collection $eleveImports;
 
     public function __construct()
     {
         $this->sessions = new ArrayCollection();
         $this->eleves = new ArrayCollection();
+        $this->eleveImports = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -124,7 +143,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->sessions->contains($session)) {
             $this->sessions->add($session);
-            $session->setTeacher($this);
+            $session->setUser($this);
         }
         return $this;
     }
@@ -133,8 +152,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->sessions->removeElement($session)) {
             // set the owning side to null (unless already changed)
-            if ($session->getTeacher() === $this) {
-                $session->setTeacher(null);
+            if ($session->getUser() === $this) {
+                $session->setUser(null);
             }
         }
         return $this;
@@ -168,6 +187,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @return Collection<int, EleveImport>
+     */
+    public function getEleveImports(): Collection
+    {
+        return $this->eleveImports;
+    }
+
+    public function addEleveImport(EleveImport $eleveImport): self
+    {
+        if (!$this->eleveImports->contains($eleveImport)) {
+            $this->eleveImports[] = $eleveImport;
+            $eleveImport->setUser($this);
+        }
+        return $this;
+    }
+
+    public function removeEleveImport(EleveImport $eleveImport): self
+    {
+        if ($this->eleveImports->removeElement($eleveImport)) {
+            if ($eleveImport->getUser() === $this) {
+                $eleveImport->setUser(null);
+            }
+        }
+        return $this;
+    }
     public function setAdminCode(?string $adminCode): self
     {
         $this->adminCode = $adminCode;

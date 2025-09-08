@@ -69,11 +69,15 @@ class DateSessionCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
+            DateField::new('date')
+                ->setFormat('dd/MM/yyyy')
+                ->setFormTypeOption('widget', 'single_text')
+                ->setLabel('Date du RdV'),
             AssociationField::new('session')
                 ->setFormTypeOption('query_builder', function ($repository) {
                     return $repository->createQueryBuilder('s')
-                        ->where('s.teacher = :teacher')
-                        ->setParameter('teacher', $this->getUser());
+                        ->where('s.user = :user')
+                        ->setParameter('user', $this->getUser());
                 })
                 ->setRequired(true)
                 ->setFormTypeOptions([
@@ -81,10 +85,7 @@ class DateSessionCrudController extends AbstractCrudController
                     'attr' => ['data-validation-required-message' => 'Veuillez sélectionner une session'],
                     'help' => 'Sélectionnez la session à laquelle cette date appartient.',
                 ])
-                ->setLabel('Associer cette journée à une session'),
-            DateField::new('date')
-                ->setFormat('dd/MM/yyyy')
-                ->setFormTypeOption('widget', 'single_text'),
+                ->setLabel('Session associée à cette journée'),
             TimeField::new('startTime', 'Heure de début')
                 ->setFormTypeOption('widget', 'single_text'),
             TimeField::new('endTime', 'Heure de fin')

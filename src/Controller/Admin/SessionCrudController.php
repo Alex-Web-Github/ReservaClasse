@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\DateSession;
 use App\Entity\Session;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -21,7 +22,7 @@ class SessionCrudController extends AbstractCrudController
     public function createEntity(string $entityFqcn)
     {
         $session = new Session();
-        $session->setTeacher($this->getUser());
+        $session->setUser($this->getUser());
         return $session;
     }
 
@@ -31,10 +32,14 @@ class SessionCrudController extends AbstractCrudController
             return;
         }
 
-        // Détacher les DateSessions de la Session
-        foreach ($entityInstance->getDates() as $dateSession) {
-            $dateSession->setSession(null);
-            $entityManager->persist($dateSession);
+        // Récupérer toutes les DateSessions liées
+        $dateSessions = $entityManager->getRepository(DateSession::class)
+            ->findBy(['session' => $entityInstance]);
+
+        // Les détacher de la session
+        foreach ($dateSessions as $dateSession) {
+            $entityInstance->removeDate($dateSession);
+            $entityManager->remove($dateSession);
         }
 
         $entityManager->remove($entityInstance);

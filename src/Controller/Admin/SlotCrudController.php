@@ -59,10 +59,18 @@ class SlotCrudController extends AbstractCrudController
                 ->formatValue(function ($value, $entity) {
                     return $entity->getDateSession()->getSession() ? $entity->getDateSession()->getSession() : '';
                 }),
+            AssociationField::new('dateSession', 'Date')
+                ->hideOnForm()
+                ->setFormTypeOption('disabled', true)  // Alternative à hideOnForm
+                ->formatValue(function ($value, $entity) {
+                    return $entity->getDateSession() ? $entity->getDateSession()->getDate()->format('d/m/Y') : '';
+                }),
             TimeField::new('startTime', 'Heure de début')
-                ->setFormTypeOption('widget', 'single_text'),
+                ->setFormTypeOption('widget', 'single_text')
+                ->hideOnForm(),
             TimeField::new('endTime', 'Heure de fin')
-                ->setFormTypeOption('widget', 'single_text'),
+                ->setFormTypeOption('widget', 'single_text')
+                ->hideOnForm(),
             BooleanField::new('isBooked', 'Réservé')
                 ->hideOnForm(),
             AssociationField::new('eleve', 'Élève')

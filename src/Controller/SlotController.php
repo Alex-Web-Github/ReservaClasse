@@ -43,7 +43,7 @@ class SlotController extends AbstractController
             $slot->setIsBooked(true);
             $em->flush();
 
-            $this->addFlash('success', sprintf(
+            $this->addFlash('info', sprintf(
                 'Créneau réservé avec succès pour %s',
                 $eleve->getFullName()
             ));

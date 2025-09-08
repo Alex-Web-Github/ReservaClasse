@@ -19,8 +19,8 @@ class Eleve
     #[ORM\Column(length: 100)]
     private ?string $lastName = null;
 
-    #[ORM\ManyToOne(inversedBy: 'eleves')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'eleves')]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?User $user = null;
 
     public function getId(): ?int

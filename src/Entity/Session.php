@@ -22,8 +22,8 @@ class Session
     private string $label;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'sessions')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $teacher = null;
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
+    private ?User $user = null;
 
     #[ORM\Column(type: 'integer')]
     #[Assert\Positive(message: 'La durée doit être positive')]
@@ -61,14 +61,14 @@ class Session
         return $this;
     }
 
-    public function getTeacher(): ?User
+    public function getUser(): ?User
     {
-        return $this->teacher;
+        return $this->user;
     }
 
-    public function setTeacher(?User $teacher): self
+    public function setUser(?User $user): self
     {
-        $this->teacher = $teacher;
+        $this->user = $user;
         return $this;
     }
 

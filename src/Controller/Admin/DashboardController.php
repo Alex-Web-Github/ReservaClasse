@@ -48,13 +48,13 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToUrl('Accueil | RéservaClasse', 'fas fa-home', '/');
-        yield MenuItem::section('Rendez-vous Parents');
-        yield MenuItem::linkToCrud('Les Sessions d\'entretien', 'fas fa-calendar-days', Session::class);
-        yield MenuItem::linkToCrud('Les jours de RdV', 'fas fa-calendar-check', DateSession::class);
+        yield MenuItem::section('Gestion des Réservations');
+        yield MenuItem::linkToCrud('Les Sessions', 'fas fa-calendar-days', Session::class);
+        yield MenuItem::linkToCrud('Les Journées', 'fas fa-calendar-check', DateSession::class);
         yield MenuItem::linkToCrud('Les Créneaux', 'fas fa-clock', Slot::class);
-        yield MenuItem::section('La Classe');
+        yield MenuItem::section('Ma Classe');
         yield MenuItem::linkToCrud('Les Elèves', 'fas fa-graduation-cap', Eleve::class);
-        yield MenuItem::linkToCrud('Import Élèves', 'fas fa-file-import', EleveImport::class)->setAction(Action::NEW);
+        yield MenuItem::linkToCrud('Importer une liste d\'élèves', 'fas fa-file-import', EleveImport::class)->setAction(Action::NEW);
 
         // Options réservées aux administrateurs
         if ($this->isGranted('ROLE_ADMIN')) {

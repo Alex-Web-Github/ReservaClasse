@@ -18,7 +18,9 @@ class SessionController extends AbstractController
     public function index(EntityManagerInterface $em): Response
     {
         $sessions = $em->getRepository(Session::class)->findAll();
-
+        if (empty($sessions)) {
+            $this->addFlash('info', 'Aucune session programmée pour le moment.');
+        }
         return $this->render('session/index.html.twig', [
             'sessions' => $sessions,
         ]);
