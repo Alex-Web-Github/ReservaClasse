@@ -44,14 +44,17 @@ class SlotController extends AbstractController
             $em->flush();
 
             $this->addFlash('info', sprintf(
-                'Créneau réservé avec succès pour %s',
-                $eleve->getFullName()
+                'Inscription réussie ! %s a été inscrit(e) au créneau du %s à %s',
+                $eleve->getFullName(),
+                $slot->getDateSession()->getDate()->format('d/m/Y'),
+                $slot->getStartTime()->format('H:i')
             ));
         } catch (\Exception $e) {
             $this->addFlash('error', 'Une erreur est survenue lors de la réservation.');
+            return $this->redirectToRoute('session.show', ['id' => $sessionId]);
         }
 
-        return $this->redirectToRoute('session.index', ['id' => $sessionId]);
+        return $this->redirectToRoute('eleve.index');
     }
 
     public function index(EntityManagerInterface $em): Response

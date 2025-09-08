@@ -31,7 +31,7 @@ class DateSessionCrudController extends AbstractCrudController
         $session = $this->getContext()?->getRequest()?->query->get('session');
         if ($session) {
             $session = $this->entityManager->getRepository(Session::class)->find($session);
-            if ($session && $session->getTeacher() === $this->getUser()) {
+            if ($session && $session->getUser() === $this->getUser()) {
                 $dateSession->setSession($session);
             }
         }

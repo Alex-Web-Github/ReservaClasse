@@ -44,8 +44,8 @@ class EleveCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        $deleteEndYear = Action::new('deleteEndYear', 'Suppression fin d\'année')
-            ->linkToCrudAction('deleteEndYearStudents')
+        $deleteEndYear = Action::new('deleteEndYear', 'Supprimer tous les élèves')
+            ->linkToCrudAction('deleteAllStudents')
             ->addCssClass('btn btn-danger')
             ->setIcon('fa fa-user-times')
             ->displayAsButton();
@@ -74,17 +74,47 @@ class EleveCrudController extends AbstractCrudController
     }
 
     // Ajout de la méthode pour la suppression en masse
-    public function deleteEndYearStudents(\EasyCorp\Bundle\EasyAdminBundle\Dto\BatchActionDto $batchActionDto)
+    public function deleteAllStudents(\EasyCorp\Bundle\EasyAdminBundle\Dto\BatchActionDto $batchActionDto)
     {
         $entityManager = $this->entityManager;
+        $elevesDeleted = 0;
+        $errors = 0;
 
         foreach ($batchActionDto->getEntityIds() as $id) {
-            $eleve = $entityManager->getRepository(Eleve::class)->find($id);
-            if ($eleve) {
-                $entityManager->remove($eleve);
+            try {
+                $eleve = $entityManager->getRepository(Eleve::class)->find($id);
+                if ($eleve) {
+                    // Récupérer tous les slots associés à cet élève
+                    $slots = $entityManager->getRepository('App\Entity\Slot')
+                        ->findBy(['eleve' => $eleve]);
+
+                    // Supprimer l'association avec l'élève pour chaque slot
+                    foreach ($slots as $slot) {
+                        $slot->setEleve(null);
+                        $slot->setIsBooked(false);
+                    }
+
+                    // Supprimer l'élève
+                    $entityManager->remove($eleve);
+                    $elevesDeleted++;
+                }
+            } catch (\Exception $e) {
+                $errors++;
             }
         }
-        $this->addFlash('success', 'Les élèves sélectionnés ont été supprimés avec succès');
+
+        try {
+            $entityManager->flush();
+
+            if ($elevesDeleted > 0) {
+                $this->addFlash('success', sprintf('%d élève(s) ont été supprimés avec succès', $elevesDeleted));
+            }
+            if ($errors > 0) {
+                $this->addFlash('warning', sprintf('%d élève(s) n\'ont pas pu être supprimés', $errors));
+            }
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'Une erreur est survenue lors de la suppression');
+        }
 
         return $this->redirect($this->adminUrlGenerator->setAction(Action::INDEX)->generateUrl());
     }

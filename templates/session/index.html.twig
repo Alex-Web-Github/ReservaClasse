@@ -26,21 +26,37 @@
               </h2>
             </div>
             <div
-              class="mb-[3rem]">
+              class="mb-2">
               <span>
                 Enseignant :
               </span>
               <span
-                class="badge badge-sm md:badge-md badge-neutral font-bold">
-                {{ session.teacher.fullName|default('Enseignant inconnu') }}
+                class="badge badge-sm md:badge-md badge-neutral badge-soft font-bold">
+
+                {{ session.user.fullName|default('Enseignant inconnu') }}
+              </span>
+            </div>
+            <div
+              class="mb-[3rem]">
+              <span>
+                Créneaux disponibles :
+              </span>
+              {% set slots = session.availableSlots %}
+              <span
+                class="badge {{ slots.available > 0 ? 'badge-success' : 'badge-error' }} badge-sm md:badge-md  font-semibold ">
+
+
+                {{ slots.available }}
+                /
+                {{ slots.total }}
               </span>
             </div>
             <div
               class="card-actions justify-end">
               <a
                 href="
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {{ path('session.show', { id: session.id, filter: 'free' }) }}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          "
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        {{ path('session.show', { id: session.id, filter: 'free' }) }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      "
                 class="btn btn-primary">
 
                 S'inscrire

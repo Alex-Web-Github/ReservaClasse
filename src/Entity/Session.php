@@ -40,7 +40,7 @@ class Session
     public function __construct()
     {
         $this->dates = new ArrayCollection();
-        $this->slotDuration = 20;        // 20 minutes par défaut
+        $this->slotDuration = 15;        // 20 minutes par défaut
         $this->slotInterval = 0;         // pas d'intervalle par défaut
         $this->label = '';               // label vide par défaut
     }
@@ -141,5 +141,28 @@ class Session
         foreach ($this->dates as $dateSession) {
             $dateSession->recalculateSlots();
         }
+    }
+
+    /**
+     * Calcule le nombre total de créneaux disponibles pour cette session
+     */
+    public function getAvailableSlots(): array
+    {
+        $total = 0;
+        $available = 0;
+
+        foreach ($this->dates as $dateSession) {
+            foreach ($dateSession->getSlots() as $slot) {
+                $total++;
+                if (!$slot->getIsBooked()) {
+                    $available++;
+                }
+            }
+        }
+
+        return [
+            'total' => $total,
+            'available' => $available
+        ];
     }
 }

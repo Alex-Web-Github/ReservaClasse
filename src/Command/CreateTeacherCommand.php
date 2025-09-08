@@ -6,7 +6,6 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -14,7 +13,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsCommand(
     name: 'app:create-teacher',
-    description: 'Crée un nouvel utilisateur enseignant',
+    description: 'Création d\'un compte enseignant',
 )]
 class CreateTeacherCommand extends Command
 {
@@ -25,22 +24,24 @@ class CreateTeacherCommand extends Command
         parent::__construct();
     }
 
-    protected function configure(): void
-    {
-        $this
-            ->addArgument('email', InputArgument::REQUIRED, 'Email de l\'enseignant')
-            ->addArgument('password', InputArgument::REQUIRED, 'Mot de passe de l\'enseignant')
-            ->addArgument('fullname', InputArgument::REQUIRED, 'Nom complet de l\'enseignant')
-            ->addArgument('admincode', InputArgument::REQUIRED, 'Code personnel de l\'enseignant');
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $email = $input->getArgument('email');
-        $password = $input->getArgument('password');
-        $fullname = $input->getArgument('fullname');
-        $admincode = $input->getArgument('admincode');
+
+        $teacher = new User();
+
+        // Demander les informations
+        $firstName = $io->ask('Prénom de l\'enseignant');
+        $lastName = $io->ask('Nom de l\'enseignant');
+        $email = $io->ask('Email de l\'enseignant');
+        $password = $io->askHidden('Mot de passe');
+        $publicCode = $io->ask('Code public (optionnel)');
+
+        // Vérification de l'email
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $io->error('L\'adresse email n\'est pas valide.');
+            return Command::FAILURE;
+        }
 
         // Vérifier si l'email existe déjà
         $existingUser = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
@@ -49,29 +50,41 @@ class CreateTeacherCommand extends Command
             return Command::FAILURE;
         }
 
-        // Vérifier si le code admin existe déjà
-        $existingCode = $this->entityManager->getRepository(User::class)->findOneBy(['adminCode' => $admincode]);
-        if ($existingCode) {
-            $io->error('Ce code personnel est déjà utilisé.');
+        // Vérifier si le code public existe déjà
+        if ($publicCode) {
+            $existingCode = $this->entityManager->getRepository(User::class)->findOneBy(['publicCode' => $publicCode]);
+            if ($existingCode) {
+                $io->error('Ce code public est déjà utilisé.');
+                return Command::FAILURE;
+            }
+        }
+
+        // Configurer l'enseignant
+        $teacher->setFirstName($firstName);
+        $teacher->setLastName($lastName);
+        $teacher->setEmail($email);
+        $teacher->setPassword($this->passwordHasher->hashPassword($teacher, $password));
+        $teacher->setRoles(['ROLE_TEACHER']);
+
+        if ($publicCode) {
+            $teacher->setPublicCode($publicCode);
+        }
+
+        try {
+            // Persister en base de données
+            $this->entityManager->persist($teacher);
+            $this->entityManager->flush();
+        } catch (\Exception $e) {
+            $io->error('Une erreur est survenue lors de la création de l\'enseignant : ' . $e->getMessage());
             return Command::FAILURE;
         }
 
-        $user = new User();
-        $user->setEmail($email);
-        $user->setFullName($fullname);
-        $user->setAdminCode($admincode);
-        $user->setRoles(['ROLE_TEACHER']); // Attribution du rôle enseignant
+        $io->success('Compte enseignant créé avec succès !');
 
-        $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
-        $user->setPassword($hashedPassword);
-
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
-
-        $io->success(sprintf('Enseignant "%s" créé avec succès.', $fullname));
+        // Afficher un résumé des informations
         $io->table(
-            ['Email', 'Nom', 'Code Personnel'],
-            [[$email, $fullname, $admincode]]
+            ['Email', 'Prénom', 'Nom', 'Code Public', 'Rôle'],
+            [[$email, $firstName, $lastName, $publicCode ?: 'Non défini', 'ROLE_TEACHER']]
         );
 
         return Command::SUCCESS;

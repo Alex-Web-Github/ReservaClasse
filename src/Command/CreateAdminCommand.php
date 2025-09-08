@@ -6,7 +6,6 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -14,7 +13,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsCommand(
     name: 'app:create-admin',
-    description: 'Crée un nouvel utilisateur administrateur',
+    description: 'Création d\'un compte administrateur',
 )]
 class CreateAdminCommand extends Command
 {
@@ -25,36 +24,35 @@ class CreateAdminCommand extends Command
         parent::__construct();
     }
 
-    protected function configure(): void
-    {
-        $this
-            ->addArgument('email', InputArgument::REQUIRED, 'Email de l\'administrateur')
-            ->addArgument('password', InputArgument::REQUIRED, 'Mot de passe de l\'administrateur')
-            ->addArgument('fullname', InputArgument::REQUIRED, 'Nom complet de l\'administrateur')
-            ->addArgument('admincode', InputArgument::REQUIRED, 'Code administrateur');
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $email = $input->getArgument('email');
-        $password = $input->getArgument('password');
-        $fullname = $input->getArgument('fullname');
-        $admincode = $input->getArgument('admincode');
 
-        $user = new User();
-        $user->setEmail($email);
-        $user->setFullName($fullname);
-        $user->setAdminCode($admincode);
-        $user->setRoles(['ROLE_ADMIN']);
+        $admin = new User();
 
-        $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
-        $user->setPassword($hashedPassword);
+        // Demander les informations
+        $firstName = $io->ask('Prénom de l\'administrateur');
+        $lastName = $io->ask('Nom de l\'administrateur');
+        $email = $io->ask('Email de l\'administrateur');
+        $password = $io->askHidden('Mot de passe');
+        $publicCode = $io->ask('Code public (optionnel)');
 
-        $this->entityManager->persist($user);
+        // Configurer l'administrateur
+        $admin->setFirstName($firstName);
+        $admin->setLastName($lastName);
+        $admin->setEmail($email);
+        $admin->setPassword($this->passwordHasher->hashPassword($admin, $password));
+        $admin->setRoles(['ROLE_ADMIN']);
+
+        if ($publicCode) {
+            $admin->setPublicCode($publicCode);
+        }
+
+        // Persister en base de données
+        $this->entityManager->persist($admin);
         $this->entityManager->flush();
 
-        $io->success('Administrateur créé avec succès.');
+        $io->success('Compte administrateur créé avec succès !');
 
         return Command::SUCCESS;
     }
