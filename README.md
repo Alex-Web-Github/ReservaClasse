@@ -2,7 +2,31 @@
 
 ![Screenshot de l'application ReservaClasse](screenshot.webp)
 
-Application web développée avec Symfony 6 pour la gestion flexible des rencontres parents-enseignants et des activités scolaires nécessitant des accompagnateurs. Cette version 2.0 apporte une refonte complète avec une meilleure gestion des utilisateurs, une interface moderne et des cas d'utilisation étendus.
+Application web développée avec Symfony 7.3 pour la gestion flexible des rencontres parents-enseignants et des activités scolaires nécessitant des accompagnateurs. Cette version 2.0 apporte une refonte complète avec une meilleure gestion des utilisateurs, une interface moderne et des cas d'utilisation étendus.
+
+## Évolution du projet
+
+### Version 1.0
+
+La première version est disponible sur GitHub : [ReservaClasse v1](https://github.com/Alex-Web-Github/ReservaClasse.git)
+
+Caractéristiques de la v1 :
+
+* Application mono-utilisateur (1 seul enseignant)
+* Interface simple de réservation
+* Gestion basique des créneaux
+* Pas d'espace d'administration
+
+### Version 2.0 (actuelle)
+
+Améliorations majeures :
+
+* Support multi-utilisateurs avec rôles
+* Interface d'administration complète
+* Configuration flexible des créneaux
+* Design moderne avec Tailwind et daisyUI
+* Structure de code optimisée
+* Nouvelles fonctionnalités (import d'élèves, gestion des dépendances...)
 
 ## Cas d'utilisation
 
