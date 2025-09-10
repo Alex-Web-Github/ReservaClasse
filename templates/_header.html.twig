@@ -19,194 +19,120 @@
     </div>
 
     {# DIV DES MENUS #}
-    <div
-      class="flex">
+    <div>
 
-      {# MENU MOBILE #}
+      {# DIV MENU MOBILE #}
       <div
-        class="dropdown">
+        class="flex lg:hidden">
         <div
-          tabindex="0"
-          role="button"
-          class="btn btn-ghost lg:hidden">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewbox="0 0 24 24"
-            stroke="currentColor">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 6h16M4 12h8m-8 6h16"/>
-          </svg>
-        </div>
-        <ul
-          tabindex="0"
-          class="menu menu-md dropdown-content absolute right-0 bg-base-100 rounded-box z-1 mt-6 w-52 p-2 shadow">
-          <li>
-            <a
-              href="{{ path('home') }}" class="menu-{{ app.current_route == 'home' ? 'active' : '' }}">
-              Accueil
-            </a>
-          </li>
-          <li>
-            <a
-              href="
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  {{ path('eleve.index') }}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  "
-              class="menu-{{ app.current_route == 'eleve.index' ? 'active' : '' }}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ">
-
-              Les Elèves
-            </a>
-          </li>
-          <li>
-            <a
-              href="
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              {{ path('session.index') }}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              "
-              class="menu-{{ app.current_route starts with 'session.' ? 'active' : '' }}">
-
-              Réserver un créneau
-            </a>
-          </li>
-          {% if not app.user %}
-            <li
-              class="mt-2">
-              <a
-                class="menu-{{ app.current_route == 'app_login' ? 'active' : '' }}"
-                href="{{ path('app_login') }}">
-                Connexion
-              </a>
-            </li>
-          {% endif %}
-        </ul>
-      </div>
-      {% if app.user %}
-        <div
-          class="dropdown">
+          class="dropdown static">
           <div
             tabindex="0"
             role="button"
-            class="btn btn-ghost btn-circle avatar avatar-online lg:hidden">
-            <div
-              class="w-10 rounded-full">
-              <img
-                alt="Tailwind CSS Navbar component"
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"/>
-            </div>
+            class="btn btn-ghost btn-lg p-2">
+            <span
+              class="text-sm">
+              MENU
+            </span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-7 w-7"
+              fill="none"
+              viewbox="0 0 24 24"
+              stroke="currentColor">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h8m-8 6h16"/>
+            </svg>
           </div>
           <ul
-            class="absolute right-0 dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 mt-6">
-            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
-              <li>
+            tabindex="0"
+            class="menu menu-lg dropdown-content absolute top-[100%] left-[50%] -translate-x-[50%] bg-base-200 rounded-box z-1 mt-2 w-xs md:w-md p-3 shadow-xl">
+            <li>
+              <a
+                href="{{ path('home') }}" class="menu-{{ app.current_route == 'home' ? 'active' : '' }}">
+                ACCUEIL
+              </a>
+            </li>
+            <li>
+              <a
+                href="
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          {{ path('eleve.index') }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          "
+                class="menu-{{ app.current_route == 'eleve.index' ? 'active' : '' }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ">
+
+                LES ÉLÈVES
+              </a>
+            </li>
+            <li>
+              <a
+                href="
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      {{ path('session.index') }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      "
+                class="menu-{{ app.current_route starts with 'session.' ? 'active' : '' }}">
+
+                RÉSERVER UN CRÉNEAU
+              </a>
+            </li>
+            {% if not app.user %}
+              <li
+                class="mt-2">
                 <a
-                  href="{{ path('admin') }}" class="menu"
-                  target="_blank">
-                  Administration
+                  class="menu-{{ app.current_route == 'app_login' ? 'active' : '' }}"
+                  href="{{ path('app_login') }}">
+                  CONNEXION
                 </a>
               </li>
             {% endif %}
-            <li
-              class="menu-disabled">
-              <a
-                href="#">
-                Mon profil
-              </a>
-            </li>
-            <li>
-              <a
-                href="{{ path('app_logout') }}" class="text-error">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewbox="0 0 20 20"
-                  fill="currentColor"
-                  class="size-5">
-                  <path
-                    fill-rule="evenodd"
-                    d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z"
-                    clip-rule="evenodd"/>
-                  <path
-                    fill-rule="evenodd"
-                    d="M6 10a.75.75 0 0 1 .75-.75h9.546l-1.048-.943a.75.75 0 1 1 1.004-1.114l2.5 2.25a.75.75 0 0 1 0 1.114l-2.5 2.25a.75.75 0 1 1-1.004-1.114l1.048-.943H6.75A.75.75 0 0 1 6 10Z"
-                    clip-rule="evenodd"/>
-                </svg>
-                Déconnexion
-              </a>
-            </li>
           </ul>
         </div>
-      {% endif %}
-
-
-      {# MENU DESKTOP #}
-      <div
-        class="hidden lg:flex items-center gap-3">
-        <ul
-          class="menu menu-lg menu-horizontal px-1 gap-2 items-center">
-          <li>
-            <a
-              href="{{ path('home') }}" class="menu-{{ app.current_route == 'home' ? 'active' : '' }}">
-              Accueil
-            </a>
-          </li>
-          <li>
-            <a
-              href="
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {{ path('eleve.index') }}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            "
-              class="menu-{{ app.current_route == 'eleve.index' ? 'active' : '' }}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ">
-
-              Les Elèves
-            </a>
-          </li>
-          <li>
-            <a
-              href="
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        {{ path('session.index') }}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        "
-              class="menu-{{ app.current_route starts with 'session.' ? 'active' : '' }}">
-
-              Réserver un créneau
-            </a>
-          </li>
-          {% if not app.user %}
-            <li>
-              <a
-                class="menu-{{ app.current_route == 'app_login' ? 'active' : '' }}"
-                href="{{ path('app_login') }}">
-                Connexion
-              </a>
-            </li>
-          {% endif %}
-        </ul>
-
         {% if app.user %}
           <div
-            class="dropdown">
+            class="dropdown static flex items-center">
             <div
               tabindex="0"
               role="button"
               class="btn btn-ghost btn-circle avatar avatar-online">
-
               <div
-                class="w-10 rounded-full">
-                <img
-                  alt="Tailwind CSS Navbar component"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"/>
+                class="w-8 md:w-10 rounded-full">
+                {% if is_granted('ROLE_ADMIN') %}
+                  <img
+                    alt="avatar"
+                    src="{{ asset('img/admin-avatar.webp') }}"/>
+                {% endif %}
+                {% if is_granted('ROLE_TEACHER') %}
+                  <img
+                    alt="avatar"
+                    src="{{ asset('img/teacher-avatar.webp') }}"/>
+                {% else %}
+                  <svg
+                    width="100%"
+                    height="100%"
+                    viewbox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M5.3163 19.4384C5.92462 18.0052 7.34492 17 9 17H15C16.6551 17 18.0754 18.0052 18.6837 19.4384M16 9.5C16 11.7091 14.2091 13.5 12 13.5C9.79086 13.5 8 11.7091 8 9.5C8 7.29086 9.79086 5.5 12 5.5C14.2091 5.5 16 7.29086 16 9.5ZM22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"/>
+                  </svg>
+                {% endif %}
               </div>
             </div>
             <ul
-              class="absolute right-0 dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+              class="menu menu-lg dropdown-content absolute top-[100%] left-[50%] -translate-x-[50%] bg-base-200 rounded-box z-1 mt-2
+                w-xs md:w-md p-3 shadow-xl">
               {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
                 <li>
                   <a
                     href="{{ path('admin') }}" class="menu"
                     target="_blank">
-                    Administration
+                    ADMINISTRATION
                   </a>
                 </li>
               {% endif %}
@@ -214,7 +140,7 @@
                 class="menu-disabled">
                 <a
                   href="#">
-                  Mon profil
+                  MON PROFIL
                 </a>
               </li>
               <li>
@@ -234,7 +160,7 @@
                       d="M6 10a.75.75 0 0 1 .75-.75h9.546l-1.048-.943a.75.75 0 1 1 1.004-1.114l2.5 2.25a.75.75 0 0 1 0 1.114l-2.5 2.25a.75.75 0 1 1-1.004-1.114l1.048-.943H6.75A.75.75 0 0 1 6 10Z"
                       clip-rule="evenodd"/>
                   </svg>
-                  Déconnexion
+                  DÉCONNEXION
                 </a>
               </li>
             </ul>
@@ -242,6 +168,120 @@
         {% endif %}
       </div>
 
+      {# DIV MENU DESKTOP #}
+      <div
+        class="hidden lg:flex items-center gap-3">
+        <ul
+          class="menu menu-md menu-horizontal px-1 gap-2 items-center">
+          <li>
+            <a
+              href="{{ path('home') }}" class="menu-{{ app.current_route == 'home' ? 'active' : '' }}">
+              ACCUEIL
+            </a>
+          </li>
+          <li>
+            <a
+              href=" {{ path('eleve.index') }} "
+              class="menu-{{ app.current_route == 'eleve.index' ? 'active' : '' }} ">
+              LES ÉLÈVES
+            </a>
+          </li>
+          <li>
+            <a
+              href=" {{ path('session.index') }} "
+              class="menu-{{ app.current_route starts with 'session.' ? 'active' : '' }}">
+              RÉSERVER UN CRÉNEAU
+            </a>
+          </li>
+          {% if not app.user %}
+            <li>
+              <a
+                class="menu-{{ app.current_route == 'app_login' ? 'active' : '' }}"
+                href="{{ path('app_login') }}">
+                CONNEXION
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+        {% if app.user %}
+          <div
+            class="dropdown">
+            <div
+              tabindex="0"
+              role="button"
+              class="btn btn-ghost btn-circle avatar avatar-online">
+              <div
+                class="w-8 md:w-10 rounded-full">
+                {% if is_granted('ROLE_ADMIN') %}
+                  <img
+                    alt="avatar"
+                    src="{{ asset('img/admin-avatar.webp') }}"/>
+                {% endif %}
+                {% if is_granted('ROLE_TEACHER') %}
+                  <img
+                    alt="avatar"
+                    src="{{ asset('img/teacher-avatar.webp') }}"/>
+                {% else %}
+                  <svg
+                    width="100%"
+                    height="100%"
+                    viewbox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M5.3163 19.4384C5.92462 18.0052 7.34492 17 9 17H15C16.6551 17 18.0754 18.0052 18.6837 19.4384M16 9.5C16 11.7091 14.2091 13.5 12 13.5C9.79086 13.5 8 11.7091 8 9.5C8 7.29086 9.79086 5.5 12 5.5C14.2091 5.5 16 7.29086 16 9.5ZM22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"/>
+                  </svg>
+                {% endif %}
+              </div>
+            </div>
+            <ul
+              class="menu menu-lg dropdown-content absolute top-[100%] right-0 bg-base-200 rounded-box z-1 mt-2 w-xs md:w-md p-3
+                shadow-xl">
+              {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+                <li>
+                  <a
+                    href="{{ path('admin') }}" class="menu"
+                    target="_blank">
+                    ADMINISTRATION
+                  </a>
+                </li>
+              {% endif %}
+              <li
+                class="menu-disabled">
+                <a
+                  href="#">
+                  MON
+                  PROFIL
+                </a>
+              </li>
+              <li>
+                <a
+                  href="{{ path('app_logout') }}" class="text-error">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewbox="0 0 20 20"
+                    fill="currentColor"
+                    class="size-5">
+                    <path
+                      fill-rule="evenodd"
+                      d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z"
+                      clip-rule="evenodd"/>
+                    <path
+                      fill-rule="evenodd"
+                      d="M6 10a.75.75 0 0 1 .75-.75h9.546l-1.048-.943a.75.75 0 1 1 1.004-1.114l2.5 2.25a.75.75 0 0 1 0 1.114l-2.5 2.25a.75.75 0 1 1-1.004-1.114l1.048-.943H6.75A.75.75 0 0 1 6 10Z"
+                      clip-rule="evenodd"/>
+                  </svg>
+                  DÉCONNEXION
+                </a>
+              </li>
+            </ul>
+          </div>
+        {% endif %}
+      </div>
     </div>
   </div>
 </header>
