@@ -11,7 +11,7 @@
 
 {% block body %}
   <div
-    class="flex-col items-center justify-center py-6 md:p-8">
+    class="flex-col items-center justify-center py-6 px-2 md:p-8">
     <div
       class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 mx-auto">
       <form
@@ -69,7 +69,7 @@
           value="{{ csrf_token('authenticate') }}">
 
         <div
-          class="form-control">
+          class="">
           <label
             class="label">
             <span
@@ -91,7 +91,7 @@
         </div>
 
         <div
-          class="form-control">
+          class="">
           <label
             class="label">
             <span
@@ -115,7 +115,7 @@
         </div>
 
         <div
-          class="form-control">
+          class="">
           <label
             class="label cursor-pointer">
             <span
@@ -130,16 +130,19 @@
         </div>
 
         <div
-          class="form-control mt-6">
+          class="flex items-center gap-4 mt-6">
           <button
             class="btn btn-primary">
             Se connecter
           </button>
+          <a
+            class="link link-hover"
+            href="{{ path('home') }}">
+            Retour
+          </a>
         </div>
 
       </form>
     </div>
   </div>
-
-
 {% endblock %}

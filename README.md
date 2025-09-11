@@ -1,8 +1,8 @@
-# Réserva'Classe 2.0 : Gestion des créneaux parents-enseignants et activités scolaires
+# Réserva'Classe 2.0 : Gestion des créneaux parents-enseignants lors d'activités scolaires
 
 ![Screenshot de l'application ReservaClasse](screenshot.webp)
 
-Application web développée avec Symfony 7.3 pour la gestion flexible des rencontres parents-enseignants et des activités scolaires nécessitant des accompagnateurs. Cette version 2.0 apporte une refonte complète avec une meilleure gestion des utilisateurs, une interface moderne et des cas d'utilisation étendus.
+Application web développée avec Symfony 7.3 pour la gestion d'inscription de parents d'élèves lors d'évènements scolaires. Cette version 2.0 apporte une refonte complète avec une meilleure gestion des utilisateurs, une interface moderne et des cas d'utilisation étendus.
 
 ## Évolution du projet
 
@@ -49,16 +49,15 @@ Améliorations majeures :
 
 * Support multi-utilisateurs avec différents rôles :
   * ADMIN : Gestion complète de l'application au niveau d'une Établissement
-  * TEACHER : Gestion des sessions et des élèves par l'enseignant
+  * TEACHER : Gestion des evènements et des élèves par l'enseignant
   * USER : Réservation par mot de passe/envoi de notifications (fonctionnalité à venir)
 * Interface d'administration sécurisée (EasyAdmin)
 * Validation stricte des mots de passe
 
-### Gestion des sessions et créneaux
+### Gestion des evènements et créneaux
 
-* Sessions personnalisables par l'enseignant
-* Configuration flexible (durée, intervalle, dates multiples)
-* Visualisation du taux d'occupation
+* Evènements paramétrables par l'enseignant (durée, intervalle entre les rendez-vous, dates multiples)
+* Visualisation du taux d'occupation (places disponibles restantes)
 
 ### Gestion des élèves
 
@@ -100,15 +99,22 @@ composer install
 
 3. Configurer la base de données dans .env.local
 
-```env
-DATABASE_URL="mysql://user:password@127.0.0.1:3306/reservaclasse_v2"
+```.env.local
+DATABASE_URL="mysql://user:password@127.0.0.1:3306/reservaclasse"
 ```
 
-4. Créer la base de données et les tables
+4. Configurer la base de données
 
 ```bash
+# Création de la base
 symfony console doctrine:database:create
-symfony console doctrine:schema:create
+
+# Validation du schéma (cohérence entre vos entités et la base de données)
+symfony console doctrine:schema:validate
+
+# Si le schéma est invalide -> générer une migration puis appliquer les migrations
+symfony console make:migration
+symfony console doctrine:migrations:migrate
 ```
 
 5. Charger les fixtures pour tester
@@ -124,7 +130,7 @@ Les fixtures permettent de peupler la base de données avec des données de test
 * Un compte administrateur
 * Un compte enseignant
 * 10 élèves de test
-* 5 sessions avec dates et créneaux
+* 5 évènements avec dates et créneaux
 * Configuration des durées et intervalles aléatoires
 
 7. Après le chargement des fixtures, vous pouvez vous connecter avec :
@@ -134,40 +140,63 @@ Les fixtures permettent de peupler la base de données avec des données de test
 
 ### Déploiement en PRODUCTION
 
-1. Configurer les variables d'environnement
+> ⚠️ **Note** : Si Symfony CLI n'est pas installé, remplacez `symfony console` par `php bin/console`
+
+#### Première installation
+
+> ⚠️ Pour importer le projet depuis le dépôt distant en SSH (exemple avec GitHub) :
 
 ```bash
+git clone git@github.com:votre-repo/ReservaClasse_v2.git
+cd ReservaClasse_v2
+```
+
+> ⚠️ Pour actualiser les versions du projet, pensez à exécuter les commandes suivantes :
+
+```bash
+git pull
+composer install --no-dev
+php bin/console asset-map:compile
+```
+
+1. Configuration de l'environnement
+
+```bash
+# Créer et configurer le fichier .env.local
 APP_ENV=prod
-APP_SECRET=votre_secret
+APP_SECRET=votre_secret_securise
 DATABASE_URL="mysql://user:password@127.0.0.1:3306/reservaclasse"
 ```
 
-2. Optimiser l'application
+2. Installation des dépendances
 
 ```bash
 composer install --no-dev --optimize-autoloader
-symfony console cache:clear
-symfony console cache:warmup
 ```
 
-3. Si besoin : pour supprimer les données de test
+3. Initialisation de la base de données
 
 ```bash
-symfony console doctrine:database:drop --force
+# Création de la base
+php bin/console doctrine:database:create --env=prod
+
+# Application des migrations
+php bin/console doctrine:migrations:migrate --env=prod --no-interaction
 ```
 
-4. Pour réinitialiser l'application
+4. Configuration du cache
 
 ```bash
-symfony console doctrine:database:create
-symfony console doctrine:schema:create
+php bin/console cache:clear --env=prod
+php bin/console cache:warmup --env=prod
 ```
 
-5. Mettre à jour la base de données
+#### Mises à jour ultérieures
+
+> ⚠️ Pour les mises à jour suivantes, commencer par sauvegarder la base :
 
 ```bash
-# Appliquer les migrations
-symfony console doctrine:migrations:migrate --env=prod --no-interaction
+mysqldump -u user -p reservaclasse > backup_$(date +%Y%m%d).sql
 ```
 
 6. Création d'un utilisateur ADMIN
@@ -200,80 +229,20 @@ Code public (optionnel): ADMIN2025
 [OK] Compte administrateur créé avec succès !
 ```
 
-Note : Cette commande est sécurisée et validera toutes les entrées avant la création du compte.
+Note : Cette commande validera toutes les entrées avant la création du compte.
 
-#### Configuration du serveur web (Apache)
+#### Configuration du serveur mutualisé (exemple: o2switch)
 
-Si vous déployez l'application sur un serveur Apache, vous devez créer un fichier de configuration pour que votre application soit accessible via un navigateur. Voici comment faire :
+Si vous déployez l'application sur un serveur mutualisé, le "Build des assets" avec Tailwind ne semble pas fonctionner correctement... Une solution simple consiste à importer les "/assets" en manuel.
 
-1. Connectez-vous à votre serveur en SSH.
+1. Compiler les 'assets' sur la version LOCALE
 
-2. Créez un nouveau fichier de configuration :
+```bash
+php bin/console tailwind:build --minify
+php bin/console asset-map:compile
+```
 
-    ```bash
-    sudo nano /etc/apache2/sites-available/reservaclasse.conf
-    ```
-
-3. Copiez cette configuration dans le fichier :
-
-    ```apache
-    <VirtualHost *:80>
-        # Configuration de base
-        ServerName reservaclasse.domaine.com
-        DocumentRoot /var/www/reservaclasse/public
-
-        # Règles du répertoire
-        <Directory /var/www/reservaclasse/public>
-            AllowOverride All
-            Require all granted
-            FallbackResource /index.php
-        </Directory>
-
-        # Logs
-        ErrorLog ${APACHE_LOG_DIR}/reservaclasse_error.log
-        CustomLog ${APACHE_LOG_DIR}/reservaclasse_access.log combined
-
-        # Headers de sécurité
-        Header set X-Content-Type-Options "nosniff"
-        Header set X-Frame-Options "SAMEORIGIN"
-        Header set X-XSS-Protection "1; mode=block"
-
-        # Compression GZIP
-        AddOutputFilterByType DEFLATE text/html text/css application/javascript
-
-        # Cache navigateur
-        <FilesMatch "\.(jpg|jpeg|png|gif|js|css)$">
-            Header set Cache-Control "max-age=2592000, public"
-        </FilesMatch>
-
-        # Protection supplémentaire
-        Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"
-        Header set Content-Security-Policy "default-src 'self'"
-    </VirtualHost>
-    ```
-
-4. Activez la configuration et redémarrez Apache :
-
-    ```bash
-    # Activer le site
-    sudo a2ensite reservaclasse.conf
-
-    # Activer les modules nécessaires
-    sudo a2enmod rewrite
-    sudo a2enmod headers
-
-    # Redémarrer Apache pour appliquer les changements
-    sudo systemctl restart apache2
-    ```
-
-Cette configuration permet à Apache de :
-
-* Servir votre application sur votre nom de domaine
-* Diriger tout le trafic vers le dossier public de Symfony
-* Gérer les URL propres de Symfony
-* Enregistrer les erreurs dans des fichiers de log séparés
-
-> **Note** : Cette configuration n'est nécessaire que si vous déployez sur un serveur Apache. Si vous utilisez un autre serveur web (Nginx, par exemple) ou une plateforme d'hébergement gérée, la configuration sera différente.
+2. Connectez-vous à votre serveur en FTP puis transférez le contenu du répertoire '/public/assets/' vers le serveur, au même emplacement.
 
 ## Contributions
 
