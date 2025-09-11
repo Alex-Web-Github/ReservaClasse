@@ -42,7 +42,7 @@ class DateSessionCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setPageTitle('index', 'Journées de session d\'entretien')
+            ->setPageTitle('index', 'Les journées pour chaque évènements')
             ->setPageTitle('new', 'Ajouter une journée')
             ->setPageTitle('edit', 'Modifier une journée')
             ->setDefaultSort(['date' => 'ASC']);
@@ -81,11 +81,11 @@ class DateSessionCrudController extends AbstractCrudController
                 })
                 ->setRequired(true)
                 ->setFormTypeOptions([
-                    'placeholder' => 'Choisissez une session',
-                    'attr' => ['data-validation-required-message' => 'Veuillez sélectionner une session'],
-                    'help' => 'Sélectionnez la session à laquelle cette date appartient.',
+                    'placeholder' => 'Choisissez un évènement',
+                    'attr' => ['data-validation-required-message' => 'Veuillez sélectionner un évènement'],
+                    'help' => 'Sélectionnez l\'évènement auquel cette date appartient.',
                 ])
-                ->setLabel('Session associée à cette journée'),
+                ->setLabel('Évènement associé à cette journée'),
             TimeField::new('startTime', 'Heure de début')
                 ->setFormTypeOption('widget', 'single_text'),
             TimeField::new('endTime', 'Heure de fin')

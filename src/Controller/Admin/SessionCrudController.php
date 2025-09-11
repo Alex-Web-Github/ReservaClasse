@@ -49,9 +49,9 @@ class SessionCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setPageTitle('index', 'Sessions d\'entretien')
-            ->setPageTitle('new', 'Créer une session d\'entretien')
-            ->setPageTitle('edit', 'Modifier la session d\'entretien')
+            ->setPageTitle('index', 'Les Évènements')
+            ->setPageTitle('new', 'Créer un évènement')
+            ->setPageTitle('edit', 'Modifier un évènement')
             ->setDefaultSort(['label' => 'ASC']);
     }
 
@@ -59,7 +59,7 @@ class SessionCrudController extends AbstractCrudController
     {
         return $actions
             ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
-                return $action->setLabel('Ajouter une Session d\'entretien');
+                return $action->setLabel('Ajouter un évènement');
             })
             ->update(Crud::PAGE_NEW, Action::SAVE_AND_RETURN, function (Action $action) {
                 return $action->setLabel('Créer');
@@ -78,21 +78,21 @@ class SessionCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('label', 'Nom de la session')
-                ->setHelp('Donnez un nom à votre session d\'entretien (ex: Entretiens de rentrée)')
+            TextField::new('label', 'Nom de l\'évènement')
+                ->setHelp('Donnez un nom à votre évènement (ex: Entretiens de rentrée)')
                 ->setFormTypeOption('attr', [
                     'maxlength' => 255,
                     'placeholder' => 'Entretiens de rentrée'
                 ]),
             IntegerField::new('slotDuration', 'Durée du créneau (minutes)')
-                ->setHelp('Durée en minutes de chaque entretien (ex: 20 minutes)')
+                ->setHelp('Durée en minutes de chaque créneau (ex: 20 minutes)')
                 ->setFormTypeOption('attr', [
                     'min' => 1,
                     'max' => 120,
                     'placeholder' => '20'
                 ]),
             IntegerField::new('slotInterval', 'Intervalle entre les créneaux (minutes)')
-                ->setHelp('Temps de pause entre chaque entretien (0 = pas de pause)')
+                ->setHelp('Temps de pause entre chaque créneau (0 = pas de pause)')
                 ->setFormTypeOption('attr', [
                     'min' => 0,
                     'max' => 60,

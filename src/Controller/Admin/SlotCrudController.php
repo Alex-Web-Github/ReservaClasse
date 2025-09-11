@@ -53,7 +53,7 @@ class SlotCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            AssociationField::new('dateSession', 'Session')
+            AssociationField::new('dateSession', 'Évènement')
                 ->hideOnForm()
                 ->setFormTypeOption('disabled', true)  // Alternative à hideOnForm
                 ->formatValue(function ($value, $entity) {

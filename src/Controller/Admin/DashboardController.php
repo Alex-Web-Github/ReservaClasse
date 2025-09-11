@@ -49,7 +49,7 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToUrl('Accueil | RéservaClasse', 'fas fa-home', '/');
         yield MenuItem::section('Gestion des Réservations');
-        yield MenuItem::linkToCrud('Les Sessions', 'fas fa-calendar-days', Session::class);
+        yield MenuItem::linkToCrud('Les Évènements', 'fas fa-calendar-days', Session::class);
         yield MenuItem::linkToCrud('Les Journées', 'fas fa-calendar-check', DateSession::class);
         yield MenuItem::linkToCrud('Les Créneaux', 'fas fa-clock', Slot::class);
         yield MenuItem::section('Ma Classe');
