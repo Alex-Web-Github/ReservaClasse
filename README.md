@@ -155,7 +155,7 @@ cd ReservaClasse_v2
 
 ```bash
 git pull
-composer install --no-dev
+composer install --no-dev --optimize-autoloader
 php bin/console asset-map:compile
 ```
 
@@ -171,7 +171,11 @@ DATABASE_URL="mysql://user:password@127.0.0.1:3306/reservaclasse"
 2. Installation des dépendances
 
 ```bash
+# Installation optimisée des dépendances
 composer install --no-dev --optimize-autoloader
+
+# Optimisation supplémentaire de l'autoloader
+composer dump-autoload --optimize --no-dev --classmap-authoritative
 ```
 
 3. Initialisation de la base de données
@@ -242,7 +246,15 @@ php bin/console tailwind:build --minify
 php bin/console asset-map:compile
 ```
 
-2. Connectez-vous à votre serveur en FTP puis transférez le contenu du répertoire '/public/assets/' vers le serveur, au même emplacement.
+2. Connectez-vous à votre serveur en FTP puis transférez le contenu (dossier compressé) du répertoire '/public/assets/' vers le serveur, au même emplacement
+
+3. Mettre à jour l'application
+
+```bash
+php bin/console cache:clear --env=prod
+php bin/console cache:warmup --env=prod
+composer dump-autoload --optimize --no-dev --classmap-authoritative
+```
 
 ## Contributions
 
